@@ -35,7 +35,7 @@ export default function AbstractGuidelines() {
                 Abstract Submission Guidelines
               </h1>
               <p className="text-lg text-gray-600">
-                Karnataka Pedicriticon 2025, IAP Karnataka State Intensive Care Chapter Conference
+                PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter
               </p>
             </div>
             
@@ -71,17 +71,17 @@ export default function AbstractGuidelines() {
           
           <div className="bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-red-400 p-4 mb-8">
             <p className="text-red-800 font-semibold text-lg">
-              FOR FREE AWARD PAPER PRESENTATION AND FREE PAPER PRESENTATION AND E-POSTER PRESENTATION AND CASE REPORT 
+              FOR AWARD PAPER PRESENTATION AND ORIGINAL ARTICLES AND CASE REPORT 
             </p>
-            <p className="text-red-600 text-sm mt-1">
+            {/* <p className="text-red-600 text-sm mt-1">
               This should be visible on the abstract submission page
-            </p>
-            <p className="text-red-600 text-sm mt-1">
+            </p> */}
+            {/* <p className="text-red-600 text-sm mt-1">
               1.Case reports will only be considered for e-posters
-            </p>
-            <p className="text-red-600 text-sm mt-1">
+            </p> */}
+            {/* <p className="text-red-600 text-sm mt-1">
               2.Research papers not selected for 'Oral' presentation will be considered for 'e-Poster' Case Report
-            </p>
+            </p> */}
           </div>
 
           {/* Core Requirements Grid */}
@@ -138,16 +138,16 @@ export default function AbstractGuidelines() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center p-2 bg-white rounded">
                     <span className="text-sm font-medium text-black">Award Paper Presentation:</span>
-                    <span className="font-bold text-blue-700">250 words</span>
+                    <span className="font-bold text-blue-700">300 words</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-white rounded">
-                    <span className="text-sm font-medium text-black">Free Paper Presentation:</span>
-                    <span className="font-bold text-blue-700">500 words</span>
+                    <span className="text-sm font-medium text-black">Original Articles:</span>
+                    <span className="font-bold text-blue-700">300 words</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-white rounded">
+                  {/* <div className="flex justify-between items-center p-2 bg-white rounded">
                     <span className="text-sm font-medium text-black">E-Poster Presentation:</span>
                     <span className="font-bold text-blue-700">500 words</span>
-                  </div>
+                  </div> */}
                   <div className="flex justify-between items-center p-2 bg-white rounded">
                     <span className="text-sm font-medium text-black">Case Report:</span>
                     <span className="font-bold text-blue-700">300 words</span>
@@ -168,13 +168,13 @@ export default function AbstractGuidelines() {
                     <span className="font-bold text-green-700">6 min + 2 min discussion</span>
                   </div>
                   <div className="flex justify-between items-center p-2 bg-white rounded">
-                    <span className="text-sm font-medium text-green-600">Free Paper Presentation:</span>
+                    <span className="text-sm font-medium text-green-600">Original Articles:</span>
                     <span className="font-bold text-green-700">5 min + 2 min discussion</span>
                   </div>
-                  <div className="flex justify-between items-center p-2 bg-white rounded">
+                  {/* <div className="flex justify-between items-center p-2 bg-white rounded">
                     <span className="text-sm font-medium text-green-600">E-Poster Presentation:</span>
                     <span className="font-bold text-green-700">10 min + 2 min discussion</span>
-                  </div>
+                  </div> */}
                   <div className="flex justify-between items-center p-2 bg-white rounded">
                     <span className="text-sm font-medium text-green-600">Case Report:</span>
                     <span className="font-bold text-green-700">8 min + 2 min discussion</span>
@@ -192,22 +192,30 @@ export default function AbstractGuidelines() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-4 rounded">
-                <h4 className="font-medium text-yellow-700 mb-3">For Original Study :</h4>
+                <h4 className="font-medium text-yellow-700 mb-3">Original Article :</h4>
                 <ol className="list-decimal list-inside text-sm text-yellow-800 space-y-1">
-                  <li>Objectives</li>
-                  <li>Methods (include statistical methods where relevant)y</li>
-                  <li>Results</li>
+                  <li>Title (in Upper Case): Maximum 50 words</li>
+                  <li>Background/ Introduction</li>
+                  <li>Aim(s) of the Study</li>
+                  <ol className="list-decimal list-inside text-sm text-yellow-800 space-y-1 ml-4">
+                    <li>Methods</li>
+                    <li>Results</li>
+                    <li>Conclusion</li>
+                    <li>Keywords</li>
+                  </ol>
+                  {/* <li>Conclusion</li> */}
+                </ol>
+              </div>
+              <div className="bg-white p-4 rounded">
+                <h4 className="font-medium text-yellow-700 mb-3">Case Report :</h4>
+                <ol className="list-decimal list-inside text-sm text-yellow-800 space-y-1">
+                  <li>Title (in Upper Case): Maximum 50 words</li>
+                  <li>Background/ Introduction</li>
+                  <li>Case Presentation</li>
+                  <li>Discussion</li>
                   <li>Conclusion</li>
                 </ol>
               </div>
-              {/* <div className="bg-white p-4 rounded">
-                <h4 className="font-medium text-yellow-700 mb-3">For Case Report (Poster):</h4>
-                <ol className="list-decimal list-inside text-sm text-yellow-800 space-y-1">
-                  <li>Background</li>
-                  <li>Case Report</li>
-                  <li>Conclusion</li>
-                </ol>
-              </div> */}
             </div>
           </div>
 
@@ -395,8 +403,8 @@ export default function AbstractGuidelines() {
             <strong>Note:</strong> Guidelines are dynamic and may change from conference to conference
           </p>
           <p className="text-xs mt-2">
-            © Karnataka Pedicriticon 2025, IAP Karnataka State Intensive Care Chapter Conference| 
-            For queries: <a href="mailto:karpedicriticon2025@gmail.com" className="text-blue-600 hover:underline">karpedicriticon2025@gmail.com</a>
+            © PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter |
+            For queries: <a href="mailto:pedicriticon2025@gmail.com" className="text-blue-600 hover:underline">pedicriticon2025@gmail.com</a>
           </p>
         </div>
       </div>
