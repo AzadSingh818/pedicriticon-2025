@@ -436,7 +436,7 @@ export default function SubmitAbstract() {
             <div className="space-y-4 text-black bg-white">
               <ValidatedTextArea
                 value={formData.abstract_content}
-                onChange={(content) => setFormData({...formData, abstract_content: content})}
+                onChange={(content: any) => setFormData({...formData, abstract_content: content})}
                 presentationType={formData.presentation_type}
                 onValidationChange={handleWordCountValidation}
                 disabled={loading}
