@@ -653,7 +653,7 @@ const closeDetailModal = () => {
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-2" />
-              Conference: 29th - 30th Nov, 2025
+              Conference: 6th to 9th November
             </div>
           </div>
         </div>
