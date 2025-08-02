@@ -96,7 +96,7 @@ export default function DelegateRegisterPage() {
             Delegate Registration
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Karnataka Pedicriticon-2025,IAP Karnataka State Intensive Care Chapter Conference
+            Pedicriticon-2025, Intensive Care Chapter Conference
           </p>
           <p className="mt-1 text-xs text-gray-500">
             Create your account to submit abstracts and access conference resources

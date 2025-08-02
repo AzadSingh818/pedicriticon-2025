@@ -19,7 +19,7 @@ export default function DelegateDashboard() {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [abstracts, setAbstracts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
   const [activeSection, setActiveSection] = useState('dashboard');
   const [showFinalUpload, setShowFinalUpload] = useState(false);
   const [selectedAbstract, setSelectedAbstract] = useState(null);
@@ -598,7 +598,7 @@ const closeDetailModal = () => {
                   {abstract.status === 'approved' && (
                     <div className="mt-3 p-3 bg-green-50 border border-green-200 rounded">
                       <p className="text-sm text-green-700">
-                        🎉 <strong>Congratulations!</strong> Your abstract has been approved for presentation at Karnataka Pedicriticon 2025.
+                        🎉 <strong>Congratulations!</strong> Your abstract has been approved for presentation at Pedicriticon 2025.
                       </p>
                       {!abstract.final_file_url && (
                         <p className="text-xs text-green-600 mt-1">
@@ -641,7 +641,7 @@ const closeDetailModal = () => {
         {/* Enhanced Welcome Section */}
         <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow text-white p-6">
           <h2 className="text-2xl font-bold mb-2">Welcome back, {user?.name}!</h2>
-          <p className="text-blue-100 mb-4">Karnataka Pedicriticon 2025 Conference Management System</p>
+          <p className="text-blue-100 mb-4">Pedicriticon 2025 Conference Management System</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="flex items-center">
               <User className="h-4 w-4 mr-2" />
@@ -1225,7 +1225,7 @@ const closeDetailModal = () => {
                 <User className="h-4 w-4 text-white" />
               </div>
               <div className="ml-3">
-                <h1 className="text-xl font-semibold text-gray-900">Karnataka Pedicriticon 2025</h1>
+                <h1 className="text-xl font-semibold text-gray-900">Pedicriticon 2025</h1>
                 <p className="text-xs text-gray-500">Production Environment • Edit Enabled</p>
               </div>
             </div>

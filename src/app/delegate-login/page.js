@@ -111,7 +111,7 @@ export default function DelegateLoginPage() {
             Delegate Portal
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Karnataka Pedicriticon-2025,IAP Karnataka State Intensive Care Chapter Conference
+             Pedicriticon-2025, Intensive Care Chapter Conference
           </p>
           <p className="mt-1 text-xs text-gray-500">
             Sign in to submit abstracts and access conference resources
@@ -254,7 +254,7 @@ export default function DelegateLoginPage() {
         {/* Conference Info */}
         <div className="text-center border-t pt-4">
           <p className="text-xs text-gray-500">
-            For technical support, contact: karpedicriticon2025@gmail.com
+            For technical support, contact: pedicriticon2025@gmail.com
           </p>
         </div>
       </div>

@@ -9,7 +9,7 @@ import {
   Stethoscope, Activity, Brain, Shield
 } from 'lucide-react';
 
-export default function KarnatakaPedicriticonHomepage() {
+export default function PedicriticonHomepage() {
   const [activeTab, setActiveTab] = useState('overview');
 
   const handleAbstractSubmission = () => {
@@ -33,9 +33,9 @@ export default function KarnatakaPedicriticonHomepage() {
 
   const importantDates = [
     { event: 'Abstract Submission Deadline', date: '31st August 2025', status: 'extended', color: 'red' },
-    { event: 'Early Bird Registration', date: 'July 1, 2025', status: 'open', color: 'green' },
-    { event: 'Abstract Notification', date: 'September 15, 2025', status: 'upcoming', color: 'blue' },
-    { event: 'Conference Dates', date: '12th-14th Sep, 2025', status: 'confirmed', color: 'purple' }
+    { event: 'Early Bird Registration', date: 'Closed', status: 'open', color: 'green' },
+    { event: 'Abstract Notification', date: '30th September 2025', status: 'upcoming', color: 'blue' },
+    { event: 'Conference Dates', date: '6th to 9th November 2025', status: 'confirmed', color: 'purple' }
   ];
 
   const abstractCategories = [
@@ -48,14 +48,14 @@ export default function KarnatakaPedicriticonHomepage() {
       prize: '1st: ₹6000, 2nd: ₹5000, 3rd: ₹4000'
     },
     { 
-      title: 'Free Paper Presentation', 
+      title: 'Poster Presentation', 
       duration: '6+2 minutes', 
       wordLimit: '500 words',
       icon: Microscope,
       description: 'Original research presentations with discussion'
     },
     { 
-      title: 'e-Poster Presentation', 
+      title: 'Articles', 
       duration: '5+2 minutes', 
       wordLimit: '500 words',
       icon: Activity,
@@ -82,8 +82,8 @@ export default function KarnatakaPedicriticonHomepage() {
                 <Heart className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-800">Karnataka Pedicriticon 2025</h1>
-                <p className="text-xs text-gray-500">IAP Karnataka State Intensive Care Chapter Conference</p>
+                <h1 className="text-xl font-bold text-gray-800">PEDICRITICON 2025</h1>
+                <p className="text-xs text-gray-500">PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter</p>
               </div>
             </div>
             
@@ -141,23 +141,23 @@ export default function KarnatakaPedicriticonHomepage() {
           </div>
           
           <h1 className="text-5xl font-bold mb-6">
-            Karnataka Pedicriticon 2025
+             Pedicriticon 2025
           </h1>
           <p className="text-xl text-blue-100 mb-4 max-w-3xl mx-auto">
-            IAP Karnataka State Intensive Care Chapter Conference
+            Intensive Care Chapter Conference
           </p>
           <p className="text-lg text-blue-200 mb-8 max-w-2xl mx-auto">
-            In Association with IAP Tumakuru District Branch at Shridevi Medical College, Tumakuru
+            Hyderabad International Conventional Centre -HICC
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <div className="flex items-center text-blue-100">
               <Calendar className="h-5 w-5 mr-2" />
-              <span>12th - 14th Sep, 2025</span>
+              <span>6th to 9th November</span>
             </div>
             <div className="flex items-center text-blue-100">
               <MapPin className="h-5 w-5 mr-2" />
-              <span>Shridevi Medical College, Tumakuru</span>
+              <span>Hyderabad, INDIA</span>
             </div>
             <div className="flex items-center text-blue-100">
               <Users className="h-5 w-5 mr-2" />
@@ -259,7 +259,7 @@ export default function KarnatakaPedicriticonHomepage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Conference Overview</h2>
             <p className="text-lg text-gray-600">
-              Join the Karnataka Pedicriticon 2025 - IAP Karnataka State Intensive Care Chapter Conference
+              Join the  Pedicriticon 2025 - Intensive Care Chapter Conference
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -353,9 +353,9 @@ export default function KarnatakaPedicriticonHomepage() {
       {/* Call to Action */}
       <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Join Karnataka Pedicriticon 2025?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Join  Pedicriticon 2025?</h2>
           <p className="text-xl text-blue-100 mb-8">
-            Submit your research abstract and be part of the Karnataka Pedicriticon 2025 - IAP Karnataka State Intensive Care Chapter Conference
+            Submit your research abstract and be part of the  Pedicriticon 2025 - Intensive Care Chapter Conference
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -385,10 +385,10 @@ export default function KarnatakaPedicriticonHomepage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Heart className="h-6 w-6 text-blue-400" />
-                <span className="text-lg font-bold">Karnataka Pedicriticon 2025</span>
+                <span className="text-lg font-bold"> Pedicriticon 2025</span>
               </div>
               <p className="text-gray-400 text-sm">
-                IAP Karnataka State Intensive Care Chapter Conference
+                Intensive Care Chapter Conference
               </p>
             </div>
             
@@ -406,8 +406,8 @@ export default function KarnatakaPedicriticonHomepage() {
               <h3 className="text-lg font-semibold mb-4">Important Dates</h3>
               <ul className="space-y-2 text-sm text-gray-400">
                 <li>Abstract Deadline: 31st August 2025</li>
-                <li>Early Registration: July 1, 2025</li>
-                <li>Conference: 12th-14th Sep, 2025</li>
+                <li>Early Registration: Closed</li>
+                <li>Conference: 6th to 9th November 2025</li>
               </ul>
             </div>
             
@@ -416,7 +416,7 @@ export default function KarnatakaPedicriticonHomepage() {
               <div className="space-y-2 text-sm text-gray-400">
                 <div className="flex items-center">
                   <Mail className="h-4 w-4 mr-2" />
-                  <span>karpedicriticon2025@gmail.com</span>
+                  <span>pedicriticon2025@gmail.com</span>
                 </div>
                 <div className="flex items-center">
                   <Phone className="h-4 w-4 mr-2" />
@@ -428,14 +428,14 @@ export default function KarnatakaPedicriticonHomepage() {
                 </div>
                 <div className="flex items-center">
                   <MapPin className="h-4 w-4 mr-2" />
-                  <span>Shridevi Medical College, Tumakuru</span>
+                  <span>Hyderabad, INDIA</span>
                 </div>
               </div>
             </div>
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2025 Karnataka Pedicriticon. All rights reserved.</p>
+            <p>&copy; 2025  Pedicriticon. All rights reserved.</p>
           </div>
         </div>
       </footer>
