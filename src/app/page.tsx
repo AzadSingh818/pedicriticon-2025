@@ -33,7 +33,7 @@ export default function PedicriticonHomepage() {
 
   const importantDates = [
     { event: 'Abstract Submission Deadline', date: '31st August 2025', status: 'extended', color: 'red' },
-    { event: 'Early Bird Registration', date: 'Closed', status: 'open', color: 'green' },
+    { event: 'Early Bird Registration', date: 'Closed', status: 'Close', color: 'green' },
     { event: 'Abstract Notification', date: '30th September 2025', status: 'upcoming', color: 'blue' },
     { event: 'Conference Dates', date: '6th to 9th November 2025', status: 'confirmed', color: 'purple' }
   ];
