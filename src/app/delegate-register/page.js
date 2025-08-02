@@ -265,9 +265,9 @@ export default function DelegateRegisterPage() {
                 />
               </div>
 
-              {/* <div>
+              <div>
                 <label htmlFor="specialty" className="block text-sm font-medium text-gray-700 mb-1">
-                  Medical Specialty *
+                  Category *
                 </label>
                 <select
                   id="specialty"
@@ -279,16 +279,16 @@ export default function DelegateRegisterPage() {
                   onChange={handleInputChange}
                 >
                   <option value="">Select Specialty</option>
-                  <option value="Pediatric Hematology/Oncology">Pediatric Hematology/Oncology</option>
-                  <option value="Hematology">Hematology</option>
-                  <option value="Oncology">Oncology</option>
-                  <option value="Transplant Medicine">Transplant Medicine</option>
-                  <option value="Immunology">Immunology</option>
+                  <option value="Pediatric Hematology/Oncology">Fellow</option>
+                  <option value="Hematology">Postgraduate</option>
+                  <option value="Oncology">Nurses</option>
+                  <option value="Transplant Medicine">Open category</option>
+                  {/* <option value="Immunology">Immunology</option>
                   <option value="Research/Laboratory">Research/Laboratory</option>
-                  <option value="Nursing">Nursing</option>
+                  <option value="Nursing">Nursing</option> */}
                   <option value="Other">Other</option>
                 </select>
-              </div> */}
+              </div>
             </div>
           </div>
 
