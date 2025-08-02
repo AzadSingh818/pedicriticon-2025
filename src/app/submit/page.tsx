@@ -197,7 +197,7 @@ export default function SubmitAbstract() {
             📝 Submit Research Abstract
           </h1>
           <p className="text-xl text-gray-600">
-            Karnataka Pedicriticon 2025 Conference Submission
+            PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter
           </p>
           <div className="mt-4 flex items-center justify-center space-x-4">
             <div className="text-sm text-blue-600 bg-blue-50 inline-block px-4 py-2 rounded-lg">
@@ -248,10 +248,10 @@ export default function SubmitAbstract() {
                   {/* 🚀 UPDATED: Changed from 250 to 300 words */}
                   <p><strong className="text-black bg-white">Word Limit: All Categories</strong></p>
                   <ul className="ml-4 mt-1 space-y-1 text-xs text-red-600 bg-white">
-                    <li>• Free Paper Presentation: 500 words</li>
-                    <li>• Case Report : 300 words</li>
-                    <li>• E-Poster Presentation: 500 words</li>
-                    <li>• Award Paper: 250 words</li>
+                    <li>• Award Paper: 300 words</li>
+                    <li>• Articles : 300 words</li>
+                    <li>• Case Report: 300 words</li>
+                    <li>• Poster: 300 words</li>
                     {/* <li>• Oral Paper: 300 words</li> */}
                     {/* <li>• Oral Presentation: 300 words</li> */}
                   </ul>
@@ -261,7 +261,7 @@ export default function SubmitAbstract() {
               <div className="bg-blue-50 p-3 rounded">
                 <p className="font-medium text-blue-800">Time Allocation:</p>
                 <p className="text-blue-700 text-xs">
-                  Free Paper Presentation: 6+2 min | Case Report: 5+2 min | E-Poster: 3+2 min | Award Paper: 5+2 min
+                  Award Paper: 6+2 min | Articles: 5+2 min | Case Report: 5+2 min | Poster: 5+2 min
                 </p>
               </div>
             </div>
@@ -386,14 +386,15 @@ export default function SubmitAbstract() {
                   disabled={loading}
                 >
                   {/* <option value="Free Paper">Free Paper</option> */}
-                  <option value="Poster">Free Paper Presentation</option>
-                  { <><option value="E-Poster">E-Poster Presentation</option><option value="Award Paper">Award Paper</option></> }
+                  <option value="Poster"></option>
+                  { <><option value="E-Poster">Article</option><option value="Award Paper">Award Paper</option></> }
                   <option value="Oral">Case Report </option>
+                  <option value="Oral">Poster</option>
                 </select>
               </div>
 
               {/* 🚀 NEW: Category Field (as requested in DOCX) */}
-              {/* <div>
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category *
                 </label>
@@ -404,16 +405,16 @@ export default function SubmitAbstract() {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black bg-white"
                   disabled={loading}
                 >
-                  <option value="Hematology">Hematology</option>
-                  <option value="Oncology">Oncology</option>
-                  <option value="InPHOG">InPHOG</option>
-                  <option value="Nursing">Nursing</option>
-                  <option value="HSCT">HSCT</option>
+                  <option value="Hematology">Fellow</option>
+                  <option value="Oncology">Postgraduate</option>
+                  <option value="InPHOG">Nurses</option>
+                  <option value="Nursing">Open category</option>
+                  {/* <option value="HSCT">HSCT</option> */}
                 </select>
                 <p className="mt-1 text-xs text-gray-500">
                   Select the primary medical category for your research
                 </p>
-              </div> */}
+              </div>
 
               {/* Co-Authors */}
               <div className="md:col-span-2">
@@ -494,7 +495,7 @@ export default function SubmitAbstract() {
 
         {/* System Info */}
         <div className="mt-6 text-center text-gray-500">
-          <p>🚀 Karnataka Pedicriticon Abstract Submission System v2.0</p>
+          <p>🚀 PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter</p>
           {/* <p>⚡ Built with Next.js 15 + PRD Compliant Implementation</p> */}
           {/* <p className="text-xs mt-1">🔄 Word Limit: 300 words • Category Support: Enabled</p> */}
         </div>

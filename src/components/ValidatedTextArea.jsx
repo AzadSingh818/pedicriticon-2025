@@ -3,13 +3,13 @@
 
 import React, { useState, useEffect } from 'react';
 import WordCounter from './WordCounter';
-import { validateWordCount } from '../lib/word-count-utils';
+import { validateWordCount, getWordLimit } from '../lib/word-count-utils';
 
 const ValidatedTextArea = ({
   value = '',
   onChange,
   presentationType = 'Poster', // Default to 'Poster'
-  placeholder = 'Enter your abstract content here... (300 words maximum)',
+  placeholder = '',
   label = 'Abstract Content',
   required = true,
   className = '',
@@ -20,6 +20,12 @@ const ValidatedTextArea = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [hasContent, setHasContent] = useState(false);
+
+  // 🚀 NEW: Get dynamic word limit based on presentation type
+  const currentLimit = getWordLimit(presentationType);
+  
+  // 🚀 NEW: Generate dynamic placeholder if not provided
+  const dynamicPlaceholder = placeholder || `Enter your abstract content here... (${currentLimit} words maximum)`;
 
   // Validate and notify parent component
   useEffect(() => {
@@ -55,8 +61,8 @@ const ValidatedTextArea = ({
       <label className="block text-sm font-medium text-gray-700">
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
-        {/* 🚀 UPDATED: Show 300 word limit in label */}
-        <span className="text-gray-500 text-xs ml-2">(Maximum 500 words)</span>
+        {/* 🚀 UPDATED: Show dynamic word limit based on presentation type */}
+        <span className="text-gray-500 text-xs ml-2">(Maximum {currentLimit} words)</span>
       </label>
 
       {/* Abstract Structure Guidelines */}
@@ -68,9 +74,9 @@ const ValidatedTextArea = ({
           <strong>Results:</strong> Key findings and data • {' '}
           <strong>Conclusion:</strong> Clinical implications
         </p>
-        {/* 🚀 NEW: Added word limit reminder */}
+        {/* 🚀 UPDATED: Show current word limit for selected type */}
         <p className="text-blue-700 text-xs mt-2 font-medium">
-          📝 Word Limit: All presentation types have different word limits.
+          📝 Word Limit for {presentationType}: {currentLimit} words maximum
         </p>
       </div>
 
@@ -81,7 +87,7 @@ const ValidatedTextArea = ({
           onChange={handleChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder={placeholder}
+          placeholder={dynamicPlaceholder}
           required={required}
           disabled={disabled}
           rows={rows}
@@ -102,14 +108,14 @@ const ValidatedTextArea = ({
           }}
         />
         
-        {/* Character feedback overlay */}
+        {/* 🚀 UPDATED: Character feedback overlay with dynamic limit */}
         {isFocused && hasContent && (
           <div className="absolute top-2 right-2 opacity-75">
             <div className={`
               text-xs px-2 py-1 rounded-full
               ${validation.isValid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}
             `}>
-              {validation.wordCount}w / 300w
+              {validation.wordCount}w / {currentLimit}w
             </div>
           </div>
         )}
@@ -125,7 +131,7 @@ const ValidatedTextArea = ({
         />
       )}
 
-      {/* 🚀 UPDATED: Validation Error Message with 300 word limit */}
+      {/* 🚀 UPDATED: Validation Error Message with dynamic word limit */}
       {!validation.isValid && hasContent && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3">
           <div className="flex items-start">
@@ -143,9 +149,9 @@ const ValidatedTextArea = ({
                   Your abstract is {Math.abs(validation.remaining)} words over the {validation.limit}-word limit for {presentationType}. 
                   Please reduce the content to meet submission requirements.
                 </p>
-                {/* 🚀 NEW: Additional helpful message */}
+                {/* 🚀 UPDATED: Dynamic tip based on word limit */}
                 <p className="mt-1 text-xs">
-                  💡 Tip: Focus on the most essential findings and conclusions to stay within the 300-word limit.
+                  💡 Tip: Focus on the most essential findings and conclusions to stay within the {currentLimit}-word limit.
                 </p>
               </div>
             </div>
@@ -164,10 +170,9 @@ const ValidatedTextArea = ({
             </div>
             <div className="ml-3">
               <p className="text-sm text-yellow-700">
-                <strong>Almost at limit:</strong> You have {validation.remaining} words remaining out of 300. 
+                <strong>Almost at limit:</strong> You have {validation.remaining} words remaining out of {currentLimit}. 
                 Consider reviewing for conciseness while maintaining scientific accuracy.
               </p>
-              {/* 🚀 NEW: Additional guidance */}
               <p className="text-xs text-yellow-600 mt-1">
                 💡 Consider using shorter sentences and removing unnecessary adjectives or adverbs.
               </p>
@@ -176,7 +181,7 @@ const ValidatedTextArea = ({
         </div>
       )}
 
-      {/* 🚀 NEW: Success message when word count is optimal */}
+      {/* Success message when word count is optimal */}
       {validation.isValid && validation.percentage >= 50 && validation.percentage <= 85 && hasContent && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-2">
           <div className="flex items-center">
@@ -195,7 +200,7 @@ const ValidatedTextArea = ({
         </div>
       )}
 
-      {/* 🚀 NEW: Guidance for very short abstracts */}
+      {/* Guidance for very short abstracts */}
       {validation.isValid && validation.percentage < 50 && hasContent && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-2">
           <div className="flex items-center">
@@ -206,7 +211,7 @@ const ValidatedTextArea = ({
             </div>
             <div className="ml-2">
               <p className="text-sm text-blue-700">
-                <strong>Consider expanding:</strong> You have {validation.remaining} more words available. 
+                <strong>Consider expanding:</strong> You have {validation.remaining} more words available out of {currentLimit}. 
                 Consider adding more detail to your methodology, results, or clinical implications.
               </p>
             </div>
