@@ -254,6 +254,9 @@ export default function SubmitAbstract() {
                     <li>• Poster: 300 words</li>
                     {/* <li>• Oral Paper: 300 words</li> */}
                     {/* <li>• Oral Presentation: 300 words</li> */}
+                    <li>• PICU Case Cafe: 500 words</li>
+                    <li>• Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards: 500 words</li>
+                    <li>• PediCritiCon Imaging Honors: Clinico-Radiology Case Awards: 500 words</li>
                   </ul>
                 </div>
               </div>
@@ -390,6 +393,9 @@ export default function SubmitAbstract() {
                   { <><option value="E-Poster">Article</option><option value="Award Paper">Award Paper</option></> }
                   <option value="Oral">Case Report </option>
                   <option value="Oral">Poster</option>
+                  <option value="PICU Case Cafe">PICU Case Cafe</option>
+                  <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
+                  <option value = "PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
                 </select>
               </div>
 
