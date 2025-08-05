@@ -197,7 +197,7 @@ export default function SubmitAbstract() {
             📝 Submit Research Abstract
           </h1>
           <p className="text-xl text-gray-600">
-            PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter
+            Karnataka Pedicriticon 2025 Conference Submission
           </p>
           <div className="mt-4 flex items-center justify-center space-x-4">
             <div className="text-sm text-blue-600 bg-blue-50 inline-block px-4 py-2 rounded-lg">
@@ -239,13 +239,6 @@ export default function SubmitAbstract() {
                 <p className="font-medium text-red-800">Online submission only</p>
                 <p className="text-red-700 text-xs">Previously published abstracts not permitted</p>
               </div>
-
-              <div className="bg-blue-50 p-3 rounded">
-                <p className="font-medium text-blue-800">Time Allocation:</p>
-                <p className="text-blue-700 text-xs">
-                  Award Paper: 6+2 min | Articles: 5+2 min | Case Report: 5+2 min | Poster: 5+2 min
-                </p>
-              </div>
             </div>
             
             <div className="space-y-3">
@@ -255,24 +248,28 @@ export default function SubmitAbstract() {
                   {/* 🚀 UPDATED: Changed from 250 to 300 words */}
                   <p><strong className="text-black bg-white">Word Limit: All Categories</strong></p>
                   <ul className="ml-4 mt-1 space-y-1 text-xs text-red-600 bg-white">
-                    <li>• Award Paper: 300 words</li>
-                    <li>• Articles : 300 words</li>
-                    <li>• Case Report: 300 words</li>
-                    <li>• Poster: 300 words</li>
+                    <li>• Free Paper Presentation: 500 words</li>
+                    <li>• Case Report : 300 words</li>
+                    <li>• E-Poster Presentation: 500 words</li>
+                    <li>• Award Paper: 250 words</li>
                     {/* <li>• Oral Paper: 300 words</li> */}
                     {/* <li>• Oral Presentation: 300 words</li> */}
-                    <li>• PICU Case Cafe: 500 words</li>
-                    <li>• Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards: 500 words</li>
-                    <li>• PediCritiCon Imaging Honors: Clinico-Radiology Case Awards: 500 words</li>
                   </ul>
                 </div>
+              </div>
+              
+              <div className="bg-blue-50 p-3 rounded">
+                <p className="font-medium text-blue-800">Time Allocation:</p>
+                <p className="text-blue-700 text-xs">
+                  Free Paper Presentation: 6+2 min | Case Report: 5+2 min | E-Poster: 3+2 min | Award Paper: 5+2 min
+                </p>
               </div>
             </div>
           </div>
           
           <div className="mt-4 bg-blue-50 p-3 rounded border-l-4 border-blue-400">
             <p className="text-blue-800 text-sm">
-              <strong>Required Structure:</strong> Objectives, Methods (include statistical methods where relevant), Results, Conclusion
+              <strong>Required Structure:</strong> Background, Methodology, Results, Conclusion
             </p>
           </div>
         </div>
@@ -389,18 +386,14 @@ export default function SubmitAbstract() {
                   disabled={loading}
                 >
                   {/* <option value="Free Paper">Free Paper</option> */}
-                  <option value="Poster"></option>
-                  { <><option value="E-Poster">Article</option><option value="Award Paper">Award Paper</option></> }
+                  <option value="Poster">Free Paper Presentation</option>
+                  { <><option value="E-Poster">E-Poster Presentation</option><option value="Award Paper">Award Paper</option></> }
                   <option value="Oral">Case Report </option>
-                  <option value="Oral">Poster</option>
-                  <option value="PICU Case Cafe">PICU Case Cafe</option>
-                  <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
-                  <option value = "PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
                 </select>
               </div>
 
               {/* 🚀 NEW: Category Field (as requested in DOCX) */}
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category *
                 </label>
@@ -411,16 +404,16 @@ export default function SubmitAbstract() {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black bg-white"
                   disabled={loading}
                 >
-                  <option value="Hematology">Fellow</option>
-                  <option value="Oncology">Postgraduate</option>
-                  <option value="InPHOG">Nurses</option>
-                  <option value="Nursing">Open category</option>
-                  {/* <option value="HSCT">HSCT</option> */}
+                  <option value="Hematology">Hematology</option>
+                  <option value="Oncology">Oncology</option>
+                  <option value="InPHOG">InPHOG</option>
+                  <option value="Nursing">Nursing</option>
+                  <option value="HSCT">HSCT</option>
                 </select>
                 <p className="mt-1 text-xs text-gray-500">
                   Select the primary medical category for your research
                 </p>
-              </div>
+              </div> */}
 
               {/* Co-Authors */}
               <div className="md:col-span-2">
@@ -442,7 +435,7 @@ export default function SubmitAbstract() {
             <div className="space-y-4 text-black bg-white">
               <ValidatedTextArea
                 value={formData.abstract_content}
-                onChange={(content: any) => setFormData({...formData, abstract_content: content})}
+                onChange={(content) => setFormData({...formData, abstract_content: content})}
                 presentationType={formData.presentation_type}
                 onValidationChange={handleWordCountValidation}
                 disabled={loading}
@@ -501,7 +494,7 @@ export default function SubmitAbstract() {
 
         {/* System Info */}
         <div className="mt-6 text-center text-gray-500">
-          <p>🚀 PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter</p>
+          <p>🚀 Karnataka Pedicriticon Abstract Submission System v2.0</p>
           {/* <p>⚡ Built with Next.js 15 + PRD Compliant Implementation</p> */}
           {/* <p className="text-xs mt-1">🔄 Word Limit: 300 words • Category Support: Enabled</p> */}
         </div>
