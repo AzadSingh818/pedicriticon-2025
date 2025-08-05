@@ -1,21 +1,47 @@
 // src/lib/word-count-utils.js
 
-// 🚀 UPDATED: Only 4 presentation types as required
+// 🚀 UPDATED: Different word limits based on presentation type
 export const WORD_LIMITS = {
   'Award Paper': 300,              // ✅ 300 words
-  'Article': 300,                  // ✅ 300 words  
+  'Article': 300,                  // ✅ 300 words
+  'Original Article': 300,         // ✅ 300 words (added variation)
   'Case Report': 300,              // ✅ 300 words
-  'Poster': 300,                   // ✅ 300 words (changed from 500)
+  'Poster': 300,                   // ✅ 300 words
+  
+  // 🚀 SPECIAL CATEGORIES WITH 500 WORDS
+  'PEDICRITICON IMAGING HONORS: CLINICO-RADIOLOGY CASE AWARDS': 500,
+  'PICU Case Cafe': 500,
+  'Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards': 500,
   
   // 🚀 FALLBACK MAPPINGS - Handle different dropdown values
   'award paper': 300,              // lowercase version
   'article': 300,                  // lowercase version
+  'original article': 300,         // lowercase version
   'case report': 300,              // lowercase version
   'poster': 300,                   // lowercase version
   'AWARD PAPER': 300,              // uppercase version
   'ARTICLE': 300,                  // uppercase version
+  'ORIGINAL ARTICLE': 300,         // uppercase version
   'CASE REPORT': 300,              // uppercase version
   'POSTER': 300,                   // uppercase version
+  
+  // 🚀 500 WORD CATEGORIES - Different case variations
+  'pedicriticon imaging honors: clinico-radiology case awards': 500,
+  'picu case cafe': 500,
+  'innovators of tomorrow: pediatric critical care dm/drnb thesis awards': 500,
+  'PICU CASE CAFE': 500,
+  'INNOVATORS OF TOMORROW: PEDIATRIC CRITICAL CARE DM/DRNB THESIS AWARDS': 500,
+  
+  // 🚀 SHORT FORM MAPPINGS
+  'Radiology Case': 500,           // Short form
+  'radiology case': 500,
+  'RADIOLOGY CASE': 500,
+  'Thesis Award': 500,             // Short form
+  'thesis award': 500,
+  'THESIS AWARD': 500,
+  'Case Cafe': 500,                // Short form
+  'case cafe': 500,
+  'CASE CAFE': 500
 };
 
 /**
@@ -39,15 +65,15 @@ export const countWords = (text) => {
 
 /**
  * Get word limit for presentation type
- * 🚀 UPDATED: All types now have 300 word limit
+ * 🚀 UPDATED: 300 words for standard types, 500 for special categories
  */
 export const getWordLimit = (presentationType) => {
-  if (!presentationType) return 300; // Default limit changed to 300
+  if (!presentationType) return 300; // Default limit
   
   // Normalize presentation type - handle different cases and variations
   const normalizedType = presentationType.toString().trim();
   
-  // 🚀 NEW: Try exact match first, then try normalized versions
+  // 🚀 Try exact match first
   if (WORD_LIMITS[normalizedType]) {
     return WORD_LIMITS[normalizedType];
   }
@@ -64,7 +90,27 @@ export const getWordLimit = (presentationType) => {
     return WORD_LIMITS[upperType];
   }
   
-  // 🚀 ALL TYPES ARE 300 WORDS - Simple fallback
+  // 🚀 SMART MATCHING - Check if contains keywords for 500-word categories
+  const lowerNormalized = normalizedType.toLowerCase();
+  
+  if (lowerNormalized.includes('imaging') || 
+      lowerNormalized.includes('radiology') || 
+      lowerNormalized.includes('clinico-radiology')) {
+    return 500;
+  }
+  
+  if (lowerNormalized.includes('picu') && 
+      lowerNormalized.includes('cafe')) {
+    return 500;
+  }
+  
+  if (lowerNormalized.includes('innovators') || 
+      lowerNormalized.includes('thesis') || 
+      lowerNormalized.includes('dm/drnb')) {
+    return 500;
+  }
+  
+  // 🚀 DEFAULT: 300 words for standard categories
   return 300;
 };
 
@@ -208,4 +254,35 @@ export const getAllLimits = () => WORD_LIMITS;
 // Check if presentation type is valid
 export const isValidPresentationType = (presentationType) => {
   return Object.keys(WORD_LIMITS).includes(presentationType);
+};
+
+/**
+ * 🚀 NEW: Helper function to determine if a presentation type gets 500 words
+ */
+export const is500WordCategory = (presentationType) => {
+  const limit = getWordLimit(presentationType);
+  return limit === 500;
+};
+
+/**
+ * 🚀 NEW: Get category type for display purposes
+ */
+export const getCategoryType = (presentationType) => {
+  const limit = getWordLimit(presentationType);
+  
+  if (limit === 500) {
+    return {
+      type: 'special',
+      description: 'Special Category',
+      wordLimit: 500,
+      color: 'text-purple-600'
+    };
+  }
+  
+  return {
+    type: 'standard',
+    description: 'Standard Category', 
+    wordLimit: 300,
+    color: 'text-blue-600'
+  };
 };

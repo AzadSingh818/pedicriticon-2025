@@ -239,6 +239,13 @@ export default function SubmitAbstract() {
                 <p className="font-medium text-red-800">Online submission only</p>
                 <p className="text-red-700 text-xs">Previously published abstracts not permitted</p>
               </div>
+
+              <div className="bg-blue-50 p-3 rounded">
+                <p className="font-medium text-blue-800">Time Allocation:</p>
+                <p className="text-blue-700 text-xs">
+                  Award Paper: 6+2 min | Articles: 5+2 min | Case Report: 5+2 min | Poster: 5+2 min
+                </p>
+              </div>
             </div>
             
             <div className="space-y-3">
@@ -259,13 +266,6 @@ export default function SubmitAbstract() {
                     <li>• PediCritiCon Imaging Honors: Clinico-Radiology Case Awards: 500 words</li>
                   </ul>
                 </div>
-              </div>
-              
-              <div className="bg-blue-50 p-3 rounded">
-                <p className="font-medium text-blue-800">Time Allocation:</p>
-                <p className="text-blue-700 text-xs">
-                  Award Paper: 6+2 min | Articles: 5+2 min | Case Report: 5+2 min | Poster: 5+2 min
-                </p>
               </div>
             </div>
           </div>
