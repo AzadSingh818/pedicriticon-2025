@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Karnataka Pedicriticon 2025",
+  title: "Pedicriticon 2025",
   description: "IAP Karnataka State Intensive Care Chapter Conference 2025",
 };
 

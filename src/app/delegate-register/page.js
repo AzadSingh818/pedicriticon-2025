@@ -278,14 +278,11 @@ export default function DelegateRegisterPage() {
                   value={formData.specialty}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Specialty</option>
-                  <option value="Pediatric Hematology/Oncology">Fellow</option>
-                  <option value="Hematology">Postgraduate</option>
-                  <option value="Oncology">Nurses</option>
-                  <option value="Transplant Medicine">Open category</option>
-                  {/* <option value="Immunology">Immunology</option>
-                  <option value="Research/Laboratory">Research/Laboratory</option>
-                  <option value="Nursing">Nursing</option> */}
+                  <option value="">Select Category</option>
+                  <option value="Fellow">Fellow</option>
+                  <option value="Postgraduate">Postgraduate</option>
+                  <option value="Nurses">Nurses</option>
+                  <option value="Open category">Open category</option>
                   <option value="Other">Other</option>
                 </select>
               </div>

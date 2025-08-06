@@ -135,8 +135,8 @@ export async function POST(request) {
       );
     }
 
-    // 🚀 ENHANCED: Better category validation with logging
-    const validCategories = ['Hematology', 'Oncology', 'InPHOG', 'Nursing', 'HSCT'];
+    // 🚀 FIXED: Updated category validation with correct values
+    const validCategories = ['Fellow', 'Postgraduate', 'Nurses', 'Open category'];
     if (!validCategories.includes(submissionData.category)) {
       console.log('❌ Invalid category received:', submissionData.category);
       console.log('✅ Valid categories are:', validCategories);
@@ -150,6 +150,31 @@ export async function POST(request) {
     }
 
     console.log('✅ Category validation passed:', submissionData.category);
+
+    // 🚀 FIXED: Updated presentation type validation with correct values
+    const validPresentationTypes = [
+      'Article', 
+      'Award Paper', 
+      'Case Report', 
+      'Poster', 
+      'PICU Case Cafe',
+      'Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards',
+      'PediCritiCon Imaging Honors: Clinico-Radiology Case Awards'
+    ];
+    
+    if (!validPresentationTypes.includes(submissionData.presentation_type)) {
+      console.log('❌ Invalid presentation type received:', submissionData.presentation_type);
+      console.log('✅ Valid presentation types are:', validPresentationTypes);
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: `Invalid presentation type "${submissionData.presentation_type}". Must be one of: ${validPresentationTypes.join(', ')}` 
+        },
+        { status: 400 }
+      );
+    }
+
+    console.log('✅ Presentation type validation passed:', submissionData.presentation_type);
 
     // 🚀 ENHANCED: Better abstract data preparation with category logging
     const abstractData = {

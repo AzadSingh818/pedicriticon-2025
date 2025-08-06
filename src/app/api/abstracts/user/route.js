@@ -95,11 +95,11 @@ const userAbstracts = await Promise.all(
       
       // 🚀 NEW: Add category-wise breakdown for user
       byCategory: {
-        hematology: userAbstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'hematology').length,
-        oncology: userAbstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'oncology').length,
-        inphog: userAbstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'inphog').length,
-        nursing: userAbstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'nursing').length,
-        hsct: userAbstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'hsct').length
+        Fellow: userAbstracts.filter(a => (a.category || 'Fellow').toLowerCase() === 'Fellow').length,
+        Postgraduate: userAbstracts.filter(a => (a.category || 'Postgraduate').toLowerCase() === 'Postgraduate').length,
+        Nurse: userAbstracts.filter(a => (a.category || 'Nurse').toLowerCase() === 'Nurse').length,
+        opencategory: userAbstracts.filter(a => (a.category || 'open category').toLowerCase() === 'open category').length,
+        //hsct: userAbstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'hsct').length
       }
     };
 

@@ -535,7 +535,7 @@ export const EmailActionButton = ({ abstract, buttonType = 'default', className 
   );
 };
 
-// 1. STATISTICS TABLE COMPONENT (Keep existing)
+// 🚀 FIXED: Statistics Table with correct presentation types (around line 200)
 export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -552,23 +552,23 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
             </tr>
           </thead>
           <tbody>
-            {/* <tr>
-              <td className="border border-gray-300 px-4 py-3 font-medium">Free Paper Presentation</td>
+            <tr>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Article</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
-                {categoryStats?.freePaper?.total || 0}
+                {categoryStats?.article?.total || 0}
               </td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
-                {categoryStats?.freePaper?.pending || 0}
+                {categoryStats?.article?.pending || 0}
               </td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
-                {categoryStats?.freePaper?.approved || 0}
+                {categoryStats?.article?.approved || 0}
               </td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
-                {categoryStats?.freePaper?.rejected || 0}
+                {categoryStats?.article?.rejected || 0}
               </td>
-            </tr> */}
-            {/* <tr>
-              <td className="border border-gray-300 px-4 py-3 font-medium">Award Paper Presentation</td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Award Paper</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
                 {categoryStats?.awardPaper?.total || 0}
               </td>
@@ -581,9 +581,24 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
                 {categoryStats?.awardPaper?.rejected || 0}
               </td>
-            </tr> */}
+            </tr>
             <tr>
-              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Poster Presentation</td>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Case Report</td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
+                {categoryStats?.caseReport?.total || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
+                {categoryStats?.caseReport?.pending || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
+                {categoryStats?.caseReport?.approved || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
+                {categoryStats?.caseReport?.rejected || 0}
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Poster</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
                 {categoryStats?.poster?.total || 0}
               </td>
@@ -598,18 +613,18 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               </td>
             </tr>
             <tr>
-              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Oral Presentation</td>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PICU Case Cafe</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
-                {categoryStats?.ePoster?.total || 0}
+                {categoryStats?.picuCafe?.total || 0}
               </td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
-                {categoryStats?.ePoster?.pending || 0}
+                {categoryStats?.picuCafe?.pending || 0}
               </td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
-                {categoryStats?.ePoster?.approved || 0}
+                {categoryStats?.picuCafe?.approved || 0}
               </td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
-                {categoryStats?.ePoster?.rejected || 0}
+                {categoryStats?.picuCafe?.rejected || 0}
               </td>
             </tr>
             <tr className="bg-gray-100 font-bold">
@@ -1008,10 +1023,10 @@ export const EnhancedAbstractTable = ({
   );
 };
 
-// 3. ABSTRACT REVIEW MODAL COMPONENT (Keep existing)
+// 🚀 FIXED: Abstract Review Modal with correct dropdowns (around line 800)
 export const AbstractReviewModal = ({ abstract, isOpen, onClose, onUpdateStatus }) => {
   const [selectedStatus, setSelectedStatus] = useState(abstract?.status || 'pending');
-  const [presentationType, setPresentationType] = useState(abstract?.category || 'Poster');
+  const [presentationType, setPresentationType] = useState(abstract?.category || 'Article');
   const [sendEmailNotification, setSendEmailNotification] = useState(true);
   const [reviewerComments, setReviewerComments] = useState('');
 
@@ -1065,7 +1080,6 @@ export const AbstractReviewModal = ({ abstract, isOpen, onClose, onUpdateStatus 
                 <p className="mt-1 text-sm text-gray-900">{abstract.email}</p>
               </div>
               
-              {/* ✅ NEW: File Status in Modal */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">File Status</label>
                 <div className="mt-1">
@@ -1093,12 +1107,13 @@ export const AbstractReviewModal = ({ abstract, isOpen, onClose, onUpdateStatus 
                   onChange={(e) => setSelectedStatus(e.target.value)}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
                 >
-                  <option value="pending text-black bg-white">Pending</option>
-                  <option value="approved text-black bg-white">Approved</option>
-                  <option value="rejected text-black bg-white">Rejected</option>
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
                 </select>
               </div>
 
+              {/* 🚀 FIXED: Presentation Type dropdown with correct options */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">Presentation Type</label>
                 <select
@@ -1106,10 +1121,13 @@ export const AbstractReviewModal = ({ abstract, isOpen, onClose, onUpdateStatus 
                   onChange={(e) => setPresentationType(e.target.value)}
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-black bg-white"
                 >
-                  {/* <option value="Free Paper">Free Paper Presentation</option> */}
-                  {/* <option value="Award Paper">Award Paper Presentation</option> */}
-                  <option value="Poster text-black bg-white">Poster Presentation</option>
-                  <option value="E-Poster text-black bg-white">Oral Presentation</option>
+                  <option value="Article">Article</option>
+                  <option value="Award Paper">Award Paper</option>
+                  <option value="Case Report">Case Report</option>
+                  <option value="Poster">Poster</option>
+                  <option value="PICU Case Cafe">PICU Case Cafe</option>
+                  <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
+                  <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
                 </select>
               </div>
 

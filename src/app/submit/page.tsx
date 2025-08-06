@@ -29,13 +29,13 @@ export default function SubmitAbstract() {
     setSubmissionId(generateSubmissionId());
   }, []);
   
-  // 🚀 UPDATED: Form data with category field
+  // 🚀 FIXED: Updated form data with correct category values
   const [formData, setFormData] = useState({
     title: '',
     presenter_name: '',
     institution_name: '',
-    presentation_type: 'Poster', // Default to Poster
-    category: 'Hematology', // 🚀 NEW: Separate category field
+    presentation_type: 'Article', // Default to Article
+    category: 'Fellow', // 🚀 FIXED: Default to Fellow instead of Hematology
     abstract_content: '',
     co_authors: '',
     registration_payment_id: '',
@@ -73,7 +73,7 @@ export default function SubmitAbstract() {
   };
 
    const handleFileUploadComplete = (files: UploadedFile[]) => {
-   setUploadedFiles(files);           // ← always the latest list
+   setUploadedFiles(files);           
    console.log('Files uploaded successfully:', files);
  };
 
@@ -103,14 +103,13 @@ export default function SubmitAbstract() {
         return;
       }
 
-      // 🚀 UPDATED: Prepare submission data with category
-
+      // 🚀 FIXED: Prepare submission data with correct category mapping
       const submissionData = {
         title: formData.title,
         presenter_name: formData.presenter_name,
         institution_name: formData.institution_name,
         presentation_type: formData.presentation_type,
-        category: formData.category,
+        category: formData.category, // This now contains Fellow/Postgraduate/etc
         abstract_content: formData.abstract_content,
         co_authors: formData.co_authors,
         registration_payment_id: formData.registration_payment_id,
@@ -151,8 +150,8 @@ export default function SubmitAbstract() {
           title: '',
           presenter_name: user?.name || '',
           institution_name: user?.institution || '',
-          presentation_type: 'Poster', // Default to Poster
-          category: 'Hematology', // 🚀 NEW: Reset to default category
+          presentation_type: 'Article', // Reset to Article
+          category: 'Fellow', // 🚀 FIXED: Reset to Fellow
           abstract_content: '',
           co_authors: '',
           registration_payment_id: '',
@@ -216,7 +215,7 @@ export default function SubmitAbstract() {
           </button>
         </div>
 
-        {/* Guidelines Panel - UPDATED with 300 word limit */}
+        {/* Guidelines Panel */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center mb-4">
             <AlertCircle className="h-5 w-5 text-orange-500 mr-2" />
@@ -252,15 +251,12 @@ export default function SubmitAbstract() {
               <div className="flex items-start">
                 <FileText className="h-4 w-4 text-purple-500 mr-2 mt-0.5 flex-shrink-0" />
                 <div>
-                  {/* 🚀 UPDATED: Changed from 250 to 300 words */}
                   <p><strong className="text-black bg-white">Word Limit: All Categories</strong></p>
                   <ul className="ml-4 mt-1 space-y-1 text-xs text-red-600 bg-white">
                     <li>• Award Paper: 300 words</li>
                     <li>• Articles : 300 words</li>
                     <li>• Case Report: 300 words</li>
                     <li>• Poster: 300 words</li>
-                    {/* <li>• Oral Paper: 300 words</li> */}
-                    {/* <li>• Oral Presentation: 300 words</li> */}
                     <li>• PICU Case Cafe: 500 words</li>
                     <li>• Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards: 500 words</li>
                     <li>• PediCritiCon Imaging Honors: Clinico-Radiology Case Awards: 500 words</li>
@@ -376,7 +372,7 @@ export default function SubmitAbstract() {
                 />
               </div>
 
-              {/* Presentation Type */}
+              {/* 🚀 FIXED: Presentation Type with correct options from your image */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Presentation Type *
@@ -388,18 +384,17 @@ export default function SubmitAbstract() {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black bg-white"
                   disabled={loading}
                 >
-                  {/* <option value="Free Paper">Free Paper</option> */}
-                  <option value="Poster"></option>
-                  { <><option value="E-Poster">Article</option><option value="Award Paper">Award Paper</option></> }
-                  <option value="Oral">Case Report </option>
-                  <option value="Oral">Poster</option>
+                  <option value="Article">Article</option>
+                  <option value="Award Paper">Award Paper</option>
+                  <option value="Case Report">Case Report</option>
+                  <option value="Poster">Poster</option>
                   <option value="PICU Case Cafe">PICU Case Cafe</option>
                   <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
-                  <option value = "PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
+                  <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
                 </select>
               </div>
 
-              {/* 🚀 NEW: Category Field (as requested in DOCX) */}
+              {/* 🚀 FIXED: Category with correct options from your image */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category *
@@ -411,11 +406,10 @@ export default function SubmitAbstract() {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black bg-white"
                   disabled={loading}
                 >
-                  <option value="Hematology">Fellow</option>
-                  <option value="Oncology">Postgraduate</option>
-                  <option value="InPHOG">Nurses</option>
-                  <option value="Nursing">Open category</option>
-                  {/* <option value="HSCT">HSCT</option> */}
+                  <option value="Fellow">Fellow</option>
+                  <option value="Postgraduate">Postgraduate</option>
+                  <option value="Nurses">Nurses</option>
+                  <option value="Open category">Open category</option>
                 </select>
                 <p className="mt-1 text-xs text-gray-500">
                   Select the primary medical category for your research
@@ -438,7 +432,7 @@ export default function SubmitAbstract() {
               </div>
             </div>
 
-            {/* Abstract Content with 300 Word Validation */}
+            {/* Abstract Content with Word Validation */}
             <div className="space-y-4 text-black bg-white">
               <ValidatedTextArea
                 value={formData.abstract_content}
@@ -502,8 +496,6 @@ export default function SubmitAbstract() {
         {/* System Info */}
         <div className="mt-6 text-center text-gray-500">
           <p>🚀 PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter</p>
-          {/* <p>⚡ Built with Next.js 15 + PRD Compliant Implementation</p> */}
-          {/* <p className="text-xs mt-1">🔄 Word Limit: 300 words • Category Support: Enabled</p> */}
         </div>
       </div>
     </div>

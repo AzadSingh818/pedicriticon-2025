@@ -26,9 +26,10 @@ export default function DelegateDashboard() {
   const [apiError, setApiError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const [lastFetched, setLastFetched] = useState(null);
+  
   // Add these new state variables
-const [showDetailModal, setShowDetailModal] = useState(false);
-const [selectedAbstractForDetail, setSelectedAbstractForDetail] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [selectedAbstractForDetail, setSelectedAbstractForDetail] = useState(null);
 
   // 🚀 NEW: Edit functionality states
   const [showEditModal, setShowEditModal] = useState(false);
@@ -164,7 +165,7 @@ const [selectedAbstractForDetail, setSelectedAbstractForDetail] = useState(null)
     fetchUserAbstracts(); // Refresh data after upload
   };
 
-  // 🚀 NEW: Handle edit abstract
+  // 🚀 FIXED: Handle edit abstract with correct default values
   const handleEditAbstract = (abstract) => {
     console.log('✏️ Opening edit modal for:', abstract.title);
     setEditingAbstract({
@@ -172,8 +173,8 @@ const [selectedAbstractForDetail, setSelectedAbstractForDetail] = useState(null)
       title: abstract.title,
       presenter_name: abstract.presenter_name,
       institution_name: abstract.institution_name || abstract.institution,
-      presentation_type: abstract.presentation_type,
-      category: abstract.category || 'Hematology', // 🚀 NEW: Include category
+      presentation_type: abstract.presentation_type || 'Article', // 🚀 FIXED: Default to Article
+      category: abstract.category || 'Fellow', // 🚀 FIXED: Default to Fellow
       abstract_content: abstract.abstract_content || abstract.abstract,
       co_authors: abstract.co_authors || ''
     });
@@ -183,18 +184,18 @@ const [selectedAbstractForDetail, setSelectedAbstractForDetail] = useState(null)
   };
 
   // Handle view details
-const handleViewDetails = (abstract) => {
-  console.log('👁️ Opening detail modal for:', abstract.title);
-  setSelectedAbstractForDetail(abstract);
-  setShowDetailModal(true);
-};
+  const handleViewDetails = (abstract) => {
+    console.log('👁️ Opening detail modal for:', abstract.title);
+    setSelectedAbstractForDetail(abstract);
+    setShowDetailModal(true);
+  };
 
-// Close detail modal
-const closeDetailModal = () => {
-  console.log('❌ Closing detail modal');
-  setShowDetailModal(false);
-  setSelectedAbstractForDetail(null);
-};
+  // Close detail modal
+  const closeDetailModal = () => {
+    console.log('❌ Closing detail modal');
+    setShowDetailModal(false);
+    setSelectedAbstractForDetail(null);
+  };
 
   // 🚀 NEW: Handle edit form submission
   const handleEditSubmit = async (e) => {
@@ -328,21 +329,20 @@ const closeDetailModal = () => {
     );
   };
 
-  // 🚀 NEW: Get category badge
+  // 🚀 FIXED: Get category badge with correct category names
   const getCategoryBadge = (category) => {
     const categoryConfig = {
-      'Hematology': { color: 'bg-red-100 text-red-700 border-red-300' },
-      'Oncology': { color: 'bg-purple-100 text-purple-700 border-purple-300' },
-      'InPHOG': { color: 'bg-blue-100 text-blue-700 border-blue-300' },
-      'Nursing': { color: 'bg-green-100 text-green-700 border-green-300' },
-      'HSCT': { color: 'bg-orange-100 text-orange-700 border-orange-300' }
+      'Fellow': { color: 'bg-red-100 text-red-700 border-red-300' },
+      'Postgraduate': { color: 'bg-purple-100 text-purple-700 border-purple-300' },
+      'Nurses': { color: 'bg-blue-100 text-blue-700 border-blue-300' },
+      'Open category': { color: 'bg-green-100 text-green-700 border-green-300' }
     };
     
-    const config = categoryConfig[category] || categoryConfig['Hematology'];
+    const config = categoryConfig[category] || categoryConfig['Fellow'];
     
     return (
       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${config.color}`}>
-        🏷️ {category}
+        🏷️ {category || 'Fellow'}
       </span>
     );
   };
@@ -481,7 +481,7 @@ const closeDetailModal = () => {
               <p className="text-gray-600 mb-4">
                 {apiError 
                   ? 'There was an issue connecting to the server. Please check your connection and try again.'
-                  : 'You haven\'t submitted any abstracts yet for Karnataka Pedicriticon 2025. Get started by submitting your first research abstract.'
+                  : 'You haven\'t submitted any abstracts yet for Pedicriticon 2025. Get started by submitting your first research abstract.'
                 }
               </p>
               <div className="flex justify-center space-x-3">
@@ -516,9 +516,9 @@ const closeDetailModal = () => {
                           <strong> Submitted:</strong> {new Date(abstract.submission_date).toLocaleDateString()} • 
                           <strong> Type:</strong> {abstract.presentation_type}
                         </p>
-                        {/* 🚀 NEW: Display category */}
+                        {/* 🚀 FIXED: Display correct category */}
                         <p>
-                          <strong>Category:</strong> {abstract.category || 'Hematology'} • 
+                          <strong>Category:</strong> {abstract.category || 'Fellow'} • 
                           <strong> Presenter:</strong> {abstract.presenter_name}
                         </p>
                         <p>
@@ -531,8 +531,8 @@ const closeDetailModal = () => {
                     </div>
                     <div className="ml-4 flex flex-col space-y-2">
                       {getStatusBadge(abstract.status)}
-                      {/* 🚀 NEW: Category badge */}
-                      {getCategoryBadge(abstract.category || 'Hematology')}
+                      {/* 🚀 FIXED: Category badge with correct values */}
+                      {getCategoryBadge(abstract.category || 'Fellow')}
                     </div>
                   </div>
 
@@ -626,13 +626,12 @@ const closeDetailModal = () => {
       finalSubmitted: abstracts.filter(a => a.status === 'final_submitted').length,
       underReview: abstracts.filter(a => a.status === 'under_review').length,
       
-      // 🚀 NEW: Category-wise stats
+      // 🚀 FIXED: Category-wise stats with correct category names
       byCategory: {
-        hematology: abstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'hematology').length,
-        oncology: abstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'oncology').length,
-        inphog: abstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'inphog').length,
-        nursing: abstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'nursing').length,
-        hsct: abstracts.filter(a => (a.category || 'Hematology').toLowerCase() === 'hsct').length
+        fellow: abstracts.filter(a => (a.category || 'Fellow').toLowerCase() === 'fellow').length,
+        postgraduate: abstracts.filter(a => (a.category || 'Fellow').toLowerCase() === 'postgraduate').length,
+        nurses: abstracts.filter(a => (a.category || 'Fellow').toLowerCase() === 'nurses').length,
+        openCategory: abstracts.filter(a => (a.category || 'Fellow').toLowerCase() === 'open category').length
       }
     };
 
@@ -653,7 +652,7 @@ const closeDetailModal = () => {
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-2" />
-              Conference: 6th to 9th November
+              Conference: March 15-17, 2025
             </div>
           </div>
         </div>
@@ -711,34 +710,30 @@ const closeDetailModal = () => {
           </div>
         </div>
 
-        {/* 🚀 NEW: Category Statistics */}
-        {/* {stats.total > 0 && (
+        {/* 🚀 FIXED: Category Statistics with correct category names */}
+        {stats.total > 0 && (
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold mb-4 text-blue-600 bg-white">Your Abstracts by Category</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center p-3 bg-red-50 rounded-lg">
-                <div className="text-2xl font-bold text-red-600">{stats.byCategory.hematology}</div>
-                <div className="text-sm text-red-700">Hematology</div>
+                <div className="text-2xl font-bold text-red-600">{stats.byCategory.fellow}</div>
+                <div className="text-sm text-red-700">Fellow</div>
               </div>
               <div className="text-center p-3 bg-purple-50 rounded-lg">
-                <div className="text-2xl font-bold text-purple-600">{stats.byCategory.oncology}</div>
-                <div className="text-sm text-purple-700">Oncology</div>
+                <div className="text-2xl font-bold text-purple-600">{stats.byCategory.postgraduate}</div>
+                <div className="text-sm text-purple-700">Postgraduate</div>
               </div>
               <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="text-2xl font-bold text-blue-600">{stats.byCategory.inphog}</div>
-                <div className="text-sm text-blue-700">InPHOG</div>
+                <div className="text-2xl font-bold text-blue-600">{stats.byCategory.nurses}</div>
+                <div className="text-sm text-blue-700">Nurses</div>
               </div>
               <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{stats.byCategory.nursing}</div>
-                <div className="text-sm text-green-700">Nursing</div>
-              </div>
-              <div className="text-center p-3 bg-orange-50 rounded-lg">
-                <div className="text-2xl font-bold text-orange-600">{stats.byCategory.hsct}</div>
-                <div className="text-sm text-orange-700">HSCT</div>
+                <div className="text-2xl font-bold text-green-600">{stats.byCategory.openCategory}</div>
+                <div className="text-sm text-green-700">Open Category</div>
               </div>
             </div>
           </div>
-        )} */}
+        )}
 
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -809,7 +804,7 @@ const closeDetailModal = () => {
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-900 mb-1">{abstract.title}</h4>
                       <p className="text-sm text-gray-600 mb-2">
-                        {abstract.id} • {abstract.presentation_type} • Category: {abstract.category || 'Hematology'} • Submitted: {new Date(abstract.submission_date).toLocaleDateString()}
+                        {abstract.id} • {abstract.presentation_type} • Category: {abstract.category || 'Fellow'} • Submitted: {new Date(abstract.submission_date).toLocaleDateString()}
                       </p>
                       <p className="text-sm text-gray-500">
                         Institution: {abstract.institution_name || abstract.institution}
@@ -817,7 +812,7 @@ const closeDetailModal = () => {
                     </div>
                     <div className="ml-4 flex flex-col space-y-1">
                       {getStatusBadge(abstract.status)}
-                      {getCategoryBadge(abstract.category || 'Hematology')}
+                      {getCategoryBadge(abstract.category || 'Fellow')}
                     </div>
                   </div>
                   
@@ -970,7 +965,7 @@ const closeDetailModal = () => {
     </div>
   );
 
-  // 🚀 NEW: Edit Abstract Modal Component
+  // 🚀 FIXED: Edit Abstract Modal Component with correct dropdown options
   const EditAbstractModal = () => {
     if (!showEditModal || !editingAbstract) return null;
 
@@ -1048,7 +1043,7 @@ const closeDetailModal = () => {
                   />
                 </div>
 
-                {/* Presentation Type */}
+                {/* 🚀 FIXED: Presentation Type dropdown with correct options */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Presentation Type *
@@ -1060,15 +1055,17 @@ const closeDetailModal = () => {
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     disabled={editLoading}
                   >
-                    {/* <option value="Free Paper">Free Paper</option> */}
-                    <option value="Poster">Poster Presentation</option>
-                    {/* <option value="E-Poster">E-Poster</option>
-                    <option value="Award Paper">Award Paper</option> */}
-                    <option value="Oral">Oral Presentation</option>
+                    <option value="Article">Article</option>
+                    <option value="Award Paper">Award Paper</option>
+                    <option value="Case Report">Case Report</option>
+                    <option value="Poster">Poster</option>
+                    <option value="PICU Case Cafe">PICU Case Cafe</option>
+                    <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
+                    <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
                   </select>
                 </div>
 
-                {/* 🚀 NEW: Category Field in Edit Modal */}
+                {/* 🚀 FIXED: Category dropdown with correct options */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Category *
@@ -1080,11 +1077,10 @@ const closeDetailModal = () => {
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                     disabled={editLoading}
                   >
-                    <option value="Hematology">Hematology</option>
-                    <option value="Oncology">Oncology</option>
-                    <option value="InPHOG">InPHOG</option>
-                    <option value="Nursing">Nursing</option>
-                    <option value="HSCT">HSCT</option>
+                    <option value="Fellow">Fellow</option>
+                    <option value="Postgraduate">Postgraduate</option>
+                    <option value="Nurses">Nurses</option>
+                    <option value="Open category">Open category</option>
                   </select>
                 </div>
 
@@ -1173,7 +1169,7 @@ const closeDetailModal = () => {
       case 'schedule':
         return <PlaceholderSection 
           title="Scientific Schedule" 
-          description="View conference sessions, presentation timings, and speaker schedules for Karnataka Pedicriticon 2025"
+          description="View conference sessions, presentation timings, and speaker schedules for Pedicriticon 2025"
           icon={Calendar}
         />;
       case 'hotels':
@@ -1185,7 +1181,7 @@ const closeDetailModal = () => {
       case 'faculty':
         return <PlaceholderSection 
           title="Faculty & Speakers" 
-          description="Meet the distinguished faculty members and keynote speakers for Karnataka Pedicriticon 2025"
+          description="Meet the distinguished faculty members and keynote speakers for Pedicriticon 2025"
           icon={Users}
         />;
       case 'invoice':
