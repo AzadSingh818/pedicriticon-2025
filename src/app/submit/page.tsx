@@ -231,7 +231,7 @@ export default function SubmitAbstract() {
               
               <div className="flex items-start text-red-600">
                 <Clock className="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" />
-                <span><strong>Deadline:</strong> 31st August 2025 (extended)</span>
+                <span><strong>Deadline:</strong> 30th September 2025 (extended)</span>
               </div>
               
               <div className="bg-red-50 border-l-4 border-red-400 p-3">

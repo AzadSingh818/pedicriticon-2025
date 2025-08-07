@@ -32,7 +32,7 @@ export default function PedicriticonHomepage() {
   ];
 
   const importantDates = [
-    { event: 'Abstract Submission Deadline', date: '31st August 2025', status: 'extended', color: 'red' },
+    { event: 'Abstract Submission Deadline', date: '30th September 2025', status: 'extended', color: 'red' },
     { event: 'Early Bird Registration', date: 'Closed', status: 'Close', color: 'green' },
     { event: 'Abstract Notification', date: '30th September 2025', status: 'upcoming', color: 'blue' },
     { event: 'Conference Dates', date: '6th to 9th November 2025', status: 'confirmed', color: 'purple' }
@@ -45,7 +45,6 @@ export default function PedicriticonHomepage() {
       wordLimit: '250 words',
       icon: Award,
       description: 'Competitive presentations for Award session',
-      prize: '1st: ₹6000, 2nd: ₹5000, 3rd: ₹4000'
     },
     { 
       title: 'Poster Presentation', 
@@ -60,7 +59,6 @@ export default function PedicriticonHomepage() {
       wordLimit: '500 words',
       icon: Activity,
       description: 'Electronic poster with presentation slot',
-      prize: '1st: ₹3000, 2nd: ₹2000, 3rd: ₹1000'
     },
     { 
       title: 'Case Report', 
@@ -405,7 +403,7 @@ export default function PedicriticonHomepage() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Important Dates</h3>
               <ul className="space-y-2 text-sm text-gray-400">
-                <li>Abstract Deadline: 31st August 2025</li>
+                <li>Abstract Deadline: 30th September 2025</li>
                 <li>Early Registration: Closed</li>
                 <li>Conference: 6th to 9th November 2025</li>
               </ul>

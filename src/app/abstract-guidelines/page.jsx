@@ -55,7 +55,7 @@ export default function AbstractGuidelines() {
             <div>
               <h3 className="font-semibold text-red-800">Important Notice</h3>
               <p className="text-red-700 text-sm">
-                Abstract submission deadline has been extended to <strong>31st August 2025</strong>. 
+                Abstract submission deadline has been extended to <strong>30th September 2025</strong>. 
                 All guidelines below must be followed for successful submission.
               </p>
             </div>
@@ -166,7 +166,7 @@ export default function AbstractGuidelines() {
                         <Clock className="h-5 w-5 text-red-600 mr-3 mt-1 flex-shrink-0" />
                         <div>
                           <p className="font-semibold text-red-800">Submission Deadline</p>
-                          <p className="text-red-700 font-medium">Extended to 31st August 2025</p>
+                          <p className="text-red-700 font-medium">Extended to 30th September 2025</p>
                         </div>
                       </div>
 
