@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import AdminAbstractDetailModal from './AdminAbstractDetailModal';
 
 // 🎯 ENHANCED TOAST NOTIFICATION SYSTEM
 const showToast = (message, type = 'success', duration = 8000) => {

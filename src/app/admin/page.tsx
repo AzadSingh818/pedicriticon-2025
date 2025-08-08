@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CategoryWiseStatisticsTable, EnhancedAbstractTable, AbstractReviewModal } from '@/components/admin/AdminComponents'
+import AdminAbstractDetailModal from '@/components/admin/AdminAbstractDetailModal' // ✅ ADD THIS LINE
 
 interface Abstract {
   id: string
@@ -68,6 +69,7 @@ export default function AdminDashboard() {
   const [showEmailTester, setShowEmailTester] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
+    const [showDetailModal, setShowDetailModal] = useState(false)
 
   // 👉 ORIGINAL AUTH CHECK - NO CHANGES
   useEffect(() => {
@@ -222,8 +224,14 @@ export default function AdminDashboard() {
   const handleSelectAbstract = (abstract: Abstract) => {
     setSelectedAbstract(abstract)
     setShowReviewModal(true)
+    setShowDetailModal(true)
   }
 
+  const handleEditAbstract = (abstract: Abstract) => {
+  setSelectedAbstract(abstract)
+  setShowDetailModal(false)
+  setShowReviewModal(true)
+  }
   const handleLogout = () => {
     document.cookie = 'admin-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
     router.push('/admin/login')
@@ -779,7 +787,20 @@ ${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional de
           handleBulkStatusUpdate={handleBulkStatusUpdate}
           updatingStatus={updatingStatus}
         />
-
+        {/* ✅ ADD THIS MODAL BEFORE CLOSING </div> */}
+        <AdminAbstractDetailModal
+          abstract={selectedAbstract}
+          isOpen={showDetailModal}
+          onClose={() => {
+            setShowDetailModal(false)
+            setSelectedAbstract(null)
+          }}
+          onEdit={(abstract) => {
+            setShowDetailModal(false)
+            setShowReviewModal(true)
+              // selectedAbstract already set
+          }}
+        />
         {/* 👉 ORIGINAL ABSTRACT REVIEW MODAL - NO CHANGES */}
         <AbstractReviewModal
           abstract={selectedAbstract}
