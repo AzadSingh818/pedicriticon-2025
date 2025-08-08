@@ -1,103 +1,154 @@
 'use client'
-// src/app/admin/page.tsx
+// src/app/admin/page.jsx - FIXED VERSION for PEDICRITICON 2025
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CategoryWiseStatisticsTable, EnhancedAbstractTable, AbstractReviewModal } from '@/components/admin/AdminComponents'
 
-interface Abstract {
-  id: string
-  title: string
-  author: string
-  email: string
-  affiliation: string
-  category: string
-  submissionDate: string
-  status: 'pending' | 'approved' | 'rejected'
-  abstract: string
-  mobile?: string
-  coAuthors?: string
-  registrationId?: string
-  abstractNumber?: string
-}
-
-interface Stats {
-  total: number
-  pending: number
-  approved: number
-  rejected: number
-}
-
-interface CategoryStats {
-  freePaper: { total: number; pending: number; approved: number; rejected: number }
-  awardPaper: { total: number; pending: number; approved: number; rejected: number }
-  poster: { total: number; pending: number; approved: number; rejected: number }
-  ePoster: { total: number; pending: number; approved: number; rejected: number }
-}
-
 export default function AdminDashboard() {
   const router = useRouter()
-  // 👉 1. NEW state: while we’re checking the cookie
+  
+  // 👉 Authentication & Loading States
   const [authLoading, setAuthLoading] = useState(true)
-  const [abstracts, setAbstracts] = useState<Abstract[]>([])
-  const [stats, setStats] = useState<Stats>({ total: 0, pending: 0, approved: 0, rejected: 0 })
-  const [categoryStats, setCategoryStats] = useState<CategoryStats>({
-    freePaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
-    awardPaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
-    poster: { total: 0, pending: 0, approved: 0, rejected: 0 },
-    ePoster: { total: 0, pending: 0, approved: 0, rejected: 0 }
-  })
   const [loading, setLoading] = useState(true)
-  const [selectedAbstract, setSelectedAbstract] = useState<Abstract | null>(null)
-  const [filter, setFilter] = useState('all')
-  const [updatingStatus, setUpdatingStatus] = useState<string | null>(null)
+  
+  // 👉 Data States  
+  const [abstracts, setAbstracts] = useState([])
+  const [filteredAbstracts, setFilteredAbstracts] = useState([])
+  const [stats, setStats] = useState({ total: 0, pending: 0, approved: 0, rejected: 0 })
+  
+  // 👉 FIXED: Correct category stats structure for all categories
+  const [categoryStats, setCategoryStats] = useState({
+    article: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    awardPaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    caseReport: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    poster: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    picuCafe: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    innovators: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    imaging: { total: 0, pending: 0, approved: 0, rejected: 0 }
+  })
+  
+  // 👉 Filter & UI States
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
+  const [selectedAbstract, setSelectedAbstract] = useState(null)
+  const [updatingStatus, setUpdatingStatus] = useState(null)
   const [showEmailTester, setShowEmailTester] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
-  // =============================================================
-// 🔒 AUTH CHECK – runs once on mount
-// =============================================================
+
+  // 👉 PEDICRITICON 2025 Categories - EXACT SCREENSHOT MATCH
+  const PEDICRITICON_CATEGORIES = [
+    { value: 'all', label: 'All Categories' },
+    { value: 'Article', label: 'Article' },
+    { value: 'Award Paper', label: 'Award Paper' },
+    { value: 'Case Report', label: 'Case Report' },
+    { value: 'Poster', label: 'Poster' },
+    { value: 'PICU Case Cafe', label: 'PICU Case Cafe' },
+    { value: 'Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards', label: 'Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards' },
+    { value: 'PediCritiCon Imaging Honors: Clinico-Radiology Case Awards', label: 'PediCritiCon Imaging Honors: Clinico-Radiology Case Awards' }
+  ]
+
+  // 👉 FIXED: Auth Check with proper JWT secret
   useEffect(() => {
     const verify = async () => {
       try {
         const res = await fetch('/api/admin/login', {
           method: 'GET',
-          credentials: 'include'   // send the admin‑token cookie
+          credentials: 'include'
         })
+        
+        console.log('🔍 Auth check response:', res.status)
+        
         if (!res.ok) {
-          router.replace('/admin/login')  // no cookie → go to login
+          console.log('❌ Auth failed, redirecting to login')
+          router.replace('/admin/login')
           return
         }
-      } catch {
+        
+        console.log('✅ Auth successful')
+      } catch (error) {
+        console.error('❌ Auth error:', error)
         router.replace('/admin/login')
         return
       } finally {
-        setAuthLoading(false)      // done checking
+        setAuthLoading(false)
       }
     }
     verify()
   }, [router])
-  
+
+  // 👉 FIXED: Fetch Abstracts with proper API call
   useEffect(() => {
-  if (!authLoading) {           // only after cookie verified
-    fetchAbstracts()
-  }
-}, [filter, authLoading])
+    if (!authLoading) {
+      fetchAbstracts()
+    }
+  }, [authLoading])
 
+  // 👉 FIXED: Search & Filter Logic
+  useEffect(() => {
+    let filtered = [...abstracts]
+    
+    // Search filter
+    if (searchTerm.trim()) {
+      const search = searchTerm.toLowerCase()
+      filtered = filtered.filter(abstract => 
+        abstract.title?.toLowerCase().includes(search) ||
+        abstract.author?.toLowerCase().includes(search) ||
+        abstract.email?.toLowerCase().includes(search) ||
+        abstract.affiliation?.toLowerCase().includes(search) ||
+        abstract.abstractNumber?.toLowerCase().includes(search)
+      )
+    }
+    
+    // Status filter
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(abstract => abstract.status === statusFilter)
+    }
+    
+    // Category filter  
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(abstract => 
+        abstract.category === categoryFilter || 
+        abstract.presentation_type === categoryFilter
+      )
+    }
+    
+    setFilteredAbstracts(filtered)
+  }, [abstracts, searchTerm, statusFilter, categoryFilter])
 
-  // Calculate category stats from abstracts
-  const calculateCategoryStats = (abstractsList: Abstract[]) => {
+  // 👉 FIXED: Calculate Category Stats with all 7 categories
+  const calculateCategoryStats = (abstractsList) => {
     const stats = {
-      freePaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      article: { total: 0, pending: 0, approved: 0, rejected: 0 },
       awardPaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      caseReport: { total: 0, pending: 0, approved: 0, rejected: 0 },
       poster: { total: 0, pending: 0, approved: 0, rejected: 0 },
-      ePoster: { total: 0, pending: 0, approved: 0, rejected: 0 }
+      picuCafe: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      innovators: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      imaging: { total: 0, pending: 0, approved: 0, rejected: 0 }
     }
 
     abstractsList.forEach(abstract => {
-      let category = 'freePaper'
-      if (abstract.category.toLowerCase().includes('award')) category = 'awardPaper'
-      else if (abstract.category.toLowerCase().includes('e-poster')) category = 'ePoster'
-      else if (abstract.category.toLowerCase().includes('poster')) category = 'poster'
+      let category = 'article' // default
+      
+      const type = (abstract.category || abstract.presentation_type || '').toLowerCase()
+      
+      if (type.includes('award') && !type.includes('thesis')) {
+        category = 'awardPaper'
+      } else if (type.includes('case') && type.includes('report')) {
+        category = 'caseReport'
+      } else if (type.includes('poster') && !type.includes('picu')) {
+        category = 'poster'
+      } else if (type.includes('picu') || type.includes('cafe')) {
+        category = 'picuCafe'
+      } else if (type.includes('innovators') || type.includes('thesis')) {
+        category = 'innovators'
+      } else if (type.includes('imaging') || type.includes('radiology')) {
+        category = 'imaging'
+      } else if (type.includes('article') || type.includes('original')) {
+        category = 'article'
+      }
 
       stats[category].total++
       if (abstract.status === 'pending') stats[category].pending++
@@ -108,37 +159,96 @@ export default function AdminDashboard() {
     return stats
   }
 
+  // 👉 FIXED: Fetch function with better error handling
   const fetchAbstracts = async () => {
     try {
-      const url = filter === 'all' ? '/api/abstracts' : `/api/abstracts?status=${filter}`
-      const response = await fetch(url, { credentials: 'include' })
+      console.log('🔄 Fetching abstracts from admin API...')
+      
+      const response = await fetch('/api/admin/abstracts', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      console.log('📡 Response status:', response.status)
       
       if (response.status === 401) {
+        console.log('❌ Unauthorized, redirecting to login')
         router.push('/admin/login')
         return
       }
       
       if (response.ok) {
         const data = await response.json()
-        setAbstracts(data.abstracts)
-        setStats(data.stats)
+        console.log('✅ Admin API Response received')
+        
+        // Handle different response formats
+        const abstractsList = data.abstracts || data.data || []
+        const statsData = data.stats || data.statistics || {}
+        
+        console.log('📊 Raw abstracts count:', abstractsList.length)
+        
+        // Map abstracts to proper format
+        const mappedAbstracts = abstractsList.map(abstract => ({
+          id: abstract.id,
+          title: abstract.title,
+          author: abstract.presenter_name || abstract.author,
+          email: abstract.user_email || abstract.email,
+          affiliation: abstract.institution_name || abstract.affiliation,
+          category: abstract.category || abstract.presentation_type,
+          presentation_type: abstract.presentation_type,
+          submissionDate: abstract.submission_date || abstract.created_at,
+          status: abstract.status || 'pending',
+          abstract: abstract.abstract_content || abstract.abstract,
+          mobile: abstract.mobile || abstract.phone,
+          coAuthors: abstract.co_authors,
+          registrationId: abstract.registration_id,
+          abstractNumber: abstract.abstract_number,
+          hasFile: abstract.hasFile || !!(abstract.file_name && abstract.file_path),
+          file_name: abstract.file_name,
+          file_path: abstract.file_path,
+          file_size: abstract.file_size
+        }))
+        
+        console.log('📋 Mapped abstracts:', mappedAbstracts.length)
+        setAbstracts(mappedAbstracts)
+        
+        // Calculate stats
+        const totalStats = {
+          total: mappedAbstracts.length,
+          pending: mappedAbstracts.filter(a => a.status === 'pending').length,
+          approved: mappedAbstracts.filter(a => a.status === 'approved').length,
+          rejected: mappedAbstracts.filter(a => a.status === 'rejected').length
+        }
+        
+        setStats(totalStats)
         
         // Calculate category stats
-        const calculatedCategoryStats = calculateCategoryStats(data.abstracts)
+        const calculatedCategoryStats = calculateCategoryStats(mappedAbstracts)
         setCategoryStats(calculatedCategoryStats)
+        
+        console.log('📊 Stats calculated:', { totalStats, calculatedCategoryStats })
+      } else {
+        console.error('❌ API Error:', response.status, response.statusText)
+        const errorText = await response.text()
+        console.error('❌ Error details:', errorText)
       }
     } catch (error) {
-      console.error('Error fetching abstracts:', error)
+      console.error('❌ Error fetching abstracts:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const updateStatus = async (id: string, status: 'approved' | 'rejected') => {
+  // 👉 Update Status Function
+  const updateStatus = async (id, status) => {
     setUpdatingStatus(id)
     try {
-      const response = await fetch('/api/abstracts', {
-        method: 'PUT', credentials: 'include',
+      const response = await fetch('/api/admin/abstracts/status', {
+        method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, status })
       })
@@ -150,6 +260,7 @@ export default function AdminDashboard() {
           )
         )
         
+        // Update stats
         setStats(prev => {
           const newStats = { ...prev }
           const oldAbstract = abstracts.find(a => a.id === id)
@@ -160,12 +271,10 @@ export default function AdminDashboard() {
             
             if (status === 'approved') newStats.approved++
             else if (status === 'rejected') newStats.rejected++
+            else if (status === 'pending') newStats.pending++
           }
           return newStats
         })
-        
-        setSelectedAbstract(null)
-        setShowReviewModal(false)
         
         // Recalculate category stats
         const updatedAbstracts = abstracts.map(abstract => 
@@ -173,6 +282,9 @@ export default function AdminDashboard() {
         )
         const calculatedCategoryStats = calculateCategoryStats(updatedAbstracts)
         setCategoryStats(calculatedCategoryStats)
+        
+        setSelectedAbstract(null)
+        setShowReviewModal(false)
       }
     } catch (error) {
       console.error('Error updating status:', error)
@@ -181,12 +293,13 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleReviewUpdate = (reviewData: any) => {
+  // 👉 Handle Functions
+  const handleReviewUpdate = (reviewData) => {
     console.log('Review update:', reviewData)
     updateStatus(reviewData.abstractId, reviewData.status)
   }
 
-  const handleSelectAbstract = (abstract: Abstract) => {
+  const handleSelectAbstract = (abstract) => {
     setSelectedAbstract(abstract)
     setShowReviewModal(true)
   }
@@ -196,25 +309,25 @@ export default function AdminDashboard() {
     router.push('/admin/login')
   }
 
-  const handleExportExcel = async (exportFilter: string = 'all') => {
+  const handleExportExcel = async (exportFilter = 'all') => {
     setExporting(true)
     try {
       const params = new URLSearchParams({
         format: 'excel',
-        status: exportFilter === 'current' ? filter : 'all',
-        category: 'all',
+        status: exportFilter === 'current' ? statusFilter : 'all',
+        category: exportFilter === 'current' ? categoryFilter : 'all',
         includeStats: 'true'
       })
 
       const response = await fetch(`/api/export?${params}`, {
-  credentials: 'include'
-})
+        credentials: 'include'
+      })
       
       if (response.ok) {
         const contentDisposition = response.headers.get('content-disposition')
         const filename = contentDisposition 
           ? contentDisposition.split('filename=')[1]?.replace(/"/g, '')
-          : `APBMT_Abstracts_${new Date().toISOString().split('T')[0]}.xlsx`
+          : `PEDICRITICON_Abstracts_${new Date().toISOString().split('T')[0]}.xlsx`
 
         const blob = await response.blob()
         const url = window.URL.createObjectURL(blob)
@@ -238,235 +351,102 @@ export default function AdminDashboard() {
     }
   }
 
-  // BULK UPDATE FUNCTION
-  const handleBulkStatusUpdate = async (abstractIds: any, status: string, comments: string = '') => {
+  // 👉 BULK UPDATE FUNCTIONS
+  const handleBulkStatusUpdate = async (abstractIds, status, comments = '') => {
     try {
-      console.log('🔍 Debug - Input parameters:', { abstractIds, status, comments });
+      console.log('🔍 Bulk update called:', { abstractIds, status, comments })
       
-      if (!abstractIds) {
-        console.error('❌ abstractIds is undefined or null');
-        alert('❌ Error: No abstracts selected. Please select abstracts first.');
-        return { success: false, error: 'No abstracts selected' };
+      if (!abstractIds || abstractIds.length === 0) {
+        alert('❌ Please select abstracts first')
+        return { success: false, error: 'No abstracts selected' }
       }
 
-      if (!status) {
-        console.error('❌ status is undefined or null');
-        alert('❌ Error: Status is required');
-        return { success: false, error: 'Status is required' };
-      }
-
-      let idsArray: string[] = [];
+      setLoading(true)
       
-      if (typeof abstractIds === 'string') {
-        idsArray = [abstractIds];
-      } else if (Array.isArray(abstractIds)) {
-        idsArray = abstractIds.filter(id => id != null && id !== '');
+      const response = await fetch('/api/admin/abstracts/status', {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          abstractIds: Array.isArray(abstractIds) ? abstractIds : [abstractIds],
+          status,
+          comments,
+          updatedBy: 'admin'
+        })
+      })
+
+      const data = await response.json()
+      
+      if (response.ok && data.success) {
+        await fetchAbstracts() // Refresh data
+        return { success: true }
       } else {
-        console.error('❌ Invalid abstractIds type:', typeof abstractIds);
-        alert('❌ Error: Invalid selection format');
-        return { success: false, error: 'Invalid selection format' };
+        throw new Error(data.error || 'Bulk update failed')
       }
-
-      if (idsArray.length === 0) {
-        console.error('❌ No valid abstract IDs found');
-        alert('❌ Error: No valid abstracts selected. Please select abstracts first.');
-        return { success: false, error: 'No valid abstracts selected' };
-      }
-
-      console.log('✅ Valid IDs array:', idsArray);
-      
-      setLoading(true);
-      
-      const requestBody = {
-        abstractIds: idsArray,
-        status,
-        updatedBy: 'admin',
-        comments: comments || '',
-        bulkOperation: true
-      };
-
-      console.log('📤 Request body:', requestBody);
-      
-      const response = await fetch('/api/abstracts/bulk-update', {
-        method: 'POST', credentials: 'include',
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
-
-      console.log('📡 Response status:', response.status);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ HTTP error:', response.status, errorText);
-        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
-      }
-
-      const data = await response.json();
-      console.log('📊 Bulk update response:', data);
-
-      const successful = data?.successful || data?.data?.successful || 0;
-      const failed = data?.failed || data?.data?.failed || 0;
-      const results = data?.results || data?.data?.results || [];
-      const success = data?.success !== false && (successful > 0 || data?.success === true);
-
-      console.log('📈 Processing results:', { successful, failed, success });
-
-      if (success && successful > 0) {
-        console.log(`✅ Successfully updated ${successful} abstracts`);
-        
-        alert(`✅ Bulk Update Successful!
-
-📊 Results:
-• Updated: ${successful} out of ${idsArray.length} abstracts
-• Status: ${status.toUpperCase()}
-• Failed: ${failed}
-${comments ? `• Comments: ${comments}` : ''}
-
-The page will refresh to show updated data.`);
-        
-        await fetchAbstracts();
-        
-        return { success: true, successful, failed };
-        
-      } else {
-        const errorMsg = data?.message || data?.error || `Update failed. Expected: ${idsArray.length}, Successful: ${successful}`;
-        console.error('❌ Update failed:', errorMsg);
-        throw new Error(errorMsg);
-      }
-
-    } catch (error: any) {
-      console.error('❌ Bulk update error:', error);
-      
-      alert(`❌ Bulk Update Failed!
-
-Error Details:
-${error.message}
-
-Debug Information:
-• Selected IDs: ${JSON.stringify(abstractIds)}
-• Status: ${status}
-• Comments: ${comments || 'None'}
-
-Troubleshooting:
-1. Check internet connection
-2. Verify server is running
-3. Check browser console for details
-4. Try refreshing the page
-
-Contact administrator if problem persists.`);
-      
-      return { success: false, error: error.message };
+    } catch (error) {
+      console.error('❌ Bulk update error:', error)
+      alert(`❌ Bulk Update Failed: ${error.message}`)
+      return { success: false, error: error.message }
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  const handleBulkApprove = async (selectedIds: string[]) => {
-    console.log('🔍 handleBulkApprove called with:', selectedIds);
-    
-    if (!selectedIds || (Array.isArray(selectedIds) && selectedIds.length === 0)) {
-      alert('⚠️ Please select abstracts to approve\n\nHow to select:\n1. Use checkboxes in the abstract list\n2. Select one or more abstracts\n3. Try the bulk approve action');
-      return;
+  const handleBulkApprove = async (selectedIds) => {
+    if (!selectedIds || selectedIds.length === 0) {
+      alert('⚠️ Please select abstracts to approve')
+      return
     }
     
-    const comments = prompt('Enter approval comments (optional):') || 'Bulk approved by admin';
+    const comments = prompt('Enter approval comments (optional):') || 'Bulk approved'
     
-    if (confirm(`Approve ${Array.isArray(selectedIds) ? selectedIds.length : 1} selected abstracts?`)) {
-      return await handleBulkStatusUpdate(selectedIds, 'approved', comments);
+    if (confirm(`Approve ${selectedIds.length} selected abstracts?`)) {
+      return await handleBulkStatusUpdate(selectedIds, 'approved', comments)
     }
-  };
+  }
 
-  const handleBulkReject = async (selectedIds: string[]) => {
-    console.log('🔍 handleBulkReject called with:', selectedIds);
-    
-    if (!selectedIds || (Array.isArray(selectedIds) && selectedIds.length === 0)) {
-      alert('⚠️ Please select abstracts to reject\n\nHow to select:\n1. Use checkboxes in the abstract list\n2. Select one or more abstracts\n3. Try the bulk reject action');
-      return;
+  const handleBulkReject = async (selectedIds) => {
+    if (!selectedIds || selectedIds.length === 0) {
+      alert('⚠️ Please select abstracts to reject')
+      return
     }
     
-    const comments = prompt('Enter rejection reason (required):');
+    const comments = prompt('Enter rejection reason (required):')
     
     if (!comments) {
-      alert('❌ Rejection reason is required\n\nPlease provide a reason for rejection to help authors understand the decision.');
-      return;
+      alert('❌ Rejection reason is required')
+      return
     }
     
-    if (confirm(`Reject ${Array.isArray(selectedIds) ? selectedIds.length : 1} selected abstracts?`)) {
-      return await handleBulkStatusUpdate(selectedIds, 'rejected', comments);
+    if (confirm(`Reject ${selectedIds.length} selected abstracts?`)) {
+      return await handleBulkStatusUpdate(selectedIds, 'rejected', comments)
     }
-  };
+  }
 
-  const handleBulkPending = async (selectedIds: string[]) => {
-    console.log('🔍 handleBulkPending called with:', selectedIds);
+  const handleIndividualApprove = async (abstractId, comments = '') => {
+    const finalComments = comments || prompt('Enter approval comments (optional):') || 'Approved'
     
-    if (!selectedIds || (Array.isArray(selectedIds) && selectedIds.length === 0)) {
-      alert('⚠️ Please select abstracts to mark as pending\n\nHow to select:\n1. Use checkboxes in the abstract list\n2. Select one or more abstracts\n3. Try the bulk pending action');
-      return;
+    if (confirm('Approve this abstract?')) {
+      return await handleBulkStatusUpdate([abstractId], 'approved', finalComments)
     }
-    
-    const comments = prompt('Enter comments (optional):') || 'Marked as pending by admin';
-    
-    if (confirm(`Mark ${Array.isArray(selectedIds) ? selectedIds.length : 1} selected abstracts as pending?`)) {
-      return await handleBulkStatusUpdate(selectedIds, 'pending', comments);
-    }
-  };
+  }
 
-  const handleIndividualApprove = async (abstractId: string, comments: string = '') => {
-    console.log('🔍 Individual approve called for:', abstractId);
+  const handleIndividualReject = async (abstractId, comments = '') => {
+    const finalComments = comments || prompt('Enter rejection reason (required):')
     
-    try {
-      setUpdatingStatus(abstractId);
-      
-      const finalComments = comments || prompt('Enter approval comments (optional):') || 'Approved by admin';
-      
-      if (confirm(`Approve this abstract?`)) {
-        const result = await handleBulkStatusUpdate([abstractId], 'approved', finalComments);
-        
-        if (result && result.success) {
-          console.log('✅ Individual approve successful');
-        }
-      }
-    } catch (error) {
-      console.error('❌ Individual approve failed:', error);
-      alert('Approval failed. Please try again.');
-    } finally {
-      setUpdatingStatus(null);
+    if (!finalComments) {
+      alert('❌ Rejection reason is required')
+      return
     }
-  };
-
-  const handleIndividualReject = async (abstractId: string, comments: string = '') => {
-    console.log('🔍 Individual reject called for:', abstractId);
     
-    try {
-      setUpdatingStatus(abstractId);
-      
-      const finalComments = comments || prompt('Enter rejection reason (required):');
-      
-      if (!finalComments) {
-        alert('❌ Rejection reason is required\n\nPlease provide a reason for rejection.');
-        setUpdatingStatus(null);
-        return;
-      }
-      
-      if (confirm(`Reject this abstract?\n\nReason: ${finalComments}`)) {
-        const result = await handleBulkStatusUpdate([abstractId], 'rejected', finalComments);
-        
-        if (result && result.success) {
-          console.log('✅ Individual reject successful');
-        }
-      }
-    } catch (error) {
-      console.error('❌ Individual reject failed:', error);
-      alert('Rejection failed. Please try again.');
-    } finally {
-      setUpdatingStatus(null);
+    if (confirm(`Reject this abstract?\n\nReason: ${finalComments}`)) {
+      return await handleBulkStatusUpdate([abstractId], 'rejected', finalComments)
     }
-  };
+  }
 
-  const handleIndividualEmail = async (abstract: Abstract, emailType: string = 'custom') => {
-    console.log('📧 Individual email called for:', abstract.id, emailType);
+  // 👉 EMAIL & DOWNLOAD FUNCTIONS
+  const handleIndividualEmail = async (abstract, emailType = 'custom') => {
+    console.log('📧 Email function called for:', abstract.id)
     
     try {
       let emailData = {
@@ -479,174 +459,78 @@ Contact administrator if problem persists.`);
           status: abstract.status,
           abstractNumber: abstract.abstractNumber || `ABST-${abstract.id}`
         }
-      };
+      }
 
       if (emailType === 'custom') {
-        const subject = prompt('Email Subject:', `Regarding your abstract: ${abstract.title}`);
-        const message = prompt('Email Message:', 'Dear Author,\n\nRegarding your abstract submission...\n\nBest regards,\nAPBMT 2025 Team');
+        const subject = prompt('Email Subject:', `Regarding your abstract: ${abstract.title}`)
+        const message = prompt('Email Message:', 'Dear Author,\n\nRegarding your abstract submission...\n\nBest regards,\nPEDICRITICON 2025 Team')
         
         if (!subject || !message) {
-          alert('Email cancelled - Subject and message are required');
-          return;
+          alert('Email cancelled - Subject and message are required')
+          return
         }
         
-        emailData = {
-          ...emailData,
-          subject,
-          message
-        };
+        emailData = { ...emailData, subject, message }
       }
 
       const response = await fetch('/api/email', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(emailData)
-      });
+      })
 
-      const result = await response.json();
+      const result = await response.json()
       
       if (result.success) {
-        alert(`✅ Email sent successfully to ${abstract.email}`);
+        alert(`✅ Email sent successfully to ${abstract.email}`)
       } else {
-        throw new Error(result.error || 'Email sending failed');
+        throw new Error(result.error || 'Email sending failed')
       }
       
-    } catch (error: any) {
-      console.error('📧 Email error:', error);
-      alert(`❌ Email failed: ${error.message}\n\nPlease check email configuration.`);
+    } catch (error) {
+      console.error('📧 Email error:', error)
+      alert(`❌ Email failed: ${error.message}`)
     }
-  };
+  }
 
-  // ✅ ENHANCED DOWNLOAD FUNCTION
-  const handleIndividualDownload = async (abstract: Abstract) => {
-    console.log('📥 Individual download called for:', abstract.id);
+  const handleIndividualDownload = async (abstract) => {
+    console.log('📥 Download function called for:', abstract.id)
     
     try {
-      if (!abstract.abstractNumber && !abstract.id) {
-        alert('❌ Cannot download: Abstract ID missing');
-        return;
+      if (!abstract.hasFile) {
+        alert('❌ No file available for this abstract')
+        return
       }
 
-      // Show loading state
-      const loadingToast = document.createElement('div');
-      loadingToast.innerHTML = `
-        <div style="position: fixed; top: 20px; right: 20px; background: #3B82F6; color: white; padding: 15px; border-radius: 8px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 20px; height: 20px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-            <div>Downloading abstract...</div>
-          </div>
-        </div>
-        <style>
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        </style>
-      `;
-      document.body.appendChild(loadingToast);
-
-      // Try the download API
       const response = await fetch(`/api/abstracts/download/${abstract.id}`, {
-  credentials: 'include'
-})
-      
-      // Remove loading toast
-      document.body.removeChild(loadingToast);
+        credentials: 'include'
+      })
       
       if (!response.ok) {
-        if (response.status === 404) {
-          const errorData = await response.json();
-          
-          alert(`📄 Download Info:
-
-Abstract ID: ${abstract.id}
-Title: ${abstract.title}
-Author: ${abstract.author}
-
-❌ Error: ${errorData.error}
-
-${errorData.details ? `Details: ${errorData.details}` : ''}
-
-${errorData.available_files ? `Available files in system:
-${JSON.stringify(errorData.available_files, null, 2)}` : ''}
-
-Please contact administrator if file should be available.`);
-          return;
-        }
-        throw new Error(`Download failed: ${response.status} ${response.statusText}`);
+        throw new Error(`Download failed: ${response.status}`)
       }
 
-      // Get filename from response headers
-      const contentDisposition = response.headers.get('content-disposition');
-      let filename = `Abstract_${abstract.id}_${abstract.title.substring(0, 30)}.pdf`;
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = abstract.file_name || `Abstract_${abstract.id}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(link)
       
-      if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="(.+)"/);
-        if (filenameMatch) {
-          filename = filenameMatch[1];
-        }
-      }
-
-      // Download the file
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(link);
+      console.log('✅ Download successful')
       
-      // Show success message
-      const successToast = document.createElement('div');
-      successToast.innerHTML = `
-        <div style="position: fixed; top: 20px; right: 20px; background: #10B981; color: white; padding: 15px; border-radius: 8px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div>✅</div>
-            <div>
-              <div style="font-weight: bold;">Download Successful!</div>
-              <div style="font-size: 14px; opacity: 0.9;">File: ${filename}</div>
-            </div>
-            <button onclick="this.closest('div').parentNode.remove()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer; margin-left: 10px;">×</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(successToast);
-      
-      // Auto remove success toast
-      setTimeout(() => {
-        if (document.body.contains(successToast)) {
-          document.body.removeChild(successToast);
-        }
-      }, 5000);
-      
-      console.log('✅ Download successful');
-      
-    } catch (error: any) {
-      console.error('📥 Download error:', error);
-      
-      alert(`❌ Download Failed!
-
-Error: ${error.message}
-
-Abstract Information:
-• ID: ${abstract.id}
-• Title: ${abstract.title}
-• Author: ${abstract.author}
-
-Troubleshooting:
-1. Check if file was uploaded with the abstract
-2. Verify file exists in uploads folder
-3. Check server logs for detailed error
-4. Contact administrator if problem persists
-
-Technical Details:
-${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional details available'}`);
+    } catch (error) {
+      console.error('📥 Download error:', error)
+      alert(`❌ Download failed: ${error.message}`)
     }
-  };
+  }
 
-  const getStatusColor = (status: string) => {
+  // 👉 UTILITY FUNCTIONS
+  const getStatusColor = (status) => {
     switch (status) {
       case 'approved': return 'bg-green-100 text-green-800 border-green-200'
       case 'rejected': return 'bg-red-100 text-red-800 border-red-200'
@@ -654,7 +538,7 @@ ${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional de
     }
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-IN', {
       year: 'numeric',
       month: 'short',
@@ -663,27 +547,28 @@ ${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional de
       minute: '2-digit'
     })
   }
-// ───────────────── AUTH SPINNER ─────────────────
-if (authLoading) {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full" />
-    </div>
-  )
-}
-// ────────────────────────────────────────────────
+
+  // 👉 LOADING STATES
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin h-10 w-10 border-b-2 border-blue-600 rounded-full" />
+      </div>
+    )
+  }
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading admin dashboard...</p>
+          <p className="mt-4 text-gray-600">Loading PEDICRITICON admin dashboard...</p>
         </div>
       </div>
     )
   }
 
+  // 👉 MAIN RENDER
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -701,15 +586,13 @@ if (authLoading) {
               >
                 📧 Email System
               </button>
-              <div className="relative">
-                <button
-                  onClick={() => handleExportExcel('all')}
-                  disabled={exporting}
-                  className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  {exporting ? '⏳ Exporting...' : '📊 Export Excel'}
-                </button>
-              </div>
+              <button
+                onClick={() => handleExportExcel('all')}
+                disabled={exporting}
+                className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                {exporting ? '⏳ Exporting...' : '📊 Export Excel'}
+              </button>
               <span className="text-sm text-gray-500">
                 📊 Total: {stats.total} submissions
               </span>
@@ -739,21 +622,77 @@ if (authLoading) {
           </div>
         )}
 
-        {/* Statistics Table */}
+        {/* 👉 FIXED: Statistics Table with correct PEDICRITICON categories */}
         <CategoryWiseStatisticsTable stats={stats} categoryStats={categoryStats} />
 
-        {/* Abstract Review Interface */}
-        <EnhancedAbstractTable 
-          abstracts={abstracts}
-          onSelectAbstract={handleSelectAbstract}
-          onUpdateStatus={updateStatus}
-          onSendEmail={handleIndividualEmail}
-          onDownload={handleIndividualDownload}
-          onApprove={handleIndividualApprove}
-          onReject={handleIndividualReject}
-          handleBulkStatusUpdate={handleBulkStatusUpdate}
-          updatingStatus={updatingStatus}
-        />
+        {/* 👉 FIXED: Abstract Review Interface with search and filters */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">📋 Abstract Review Interface</h3>
+            <div className="text-sm text-gray-500">
+              Showing: {filteredAbstracts.length} / {abstracts.length}
+            </div>
+          </div>
+          
+          {/* 👉 FIXED: Search and Filter Controls */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div>
+              <input
+                type="text"
+                placeholder="Search abstracts..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            
+            <div>
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                {PEDICRITICON_CATEGORIES.map(cat => (
+                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            
+            <div>
+              <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="all">All Files</option>
+                <option value="with">With Files</option>
+                <option value="without">Without Files</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Enhanced Abstract Table */}
+          <EnhancedAbstractTable 
+            abstracts={filteredAbstracts}
+            onSelectAbstract={handleSelectAbstract}
+            onUpdateStatus={updateStatus}
+            onSendEmail={handleIndividualEmail}
+            onDownload={handleIndividualDownload}
+            onApprove={handleIndividualApprove}
+            onReject={handleIndividualReject}
+            handleBulkStatusUpdate={handleBulkStatusUpdate}
+            updatingStatus={updatingStatus}
+          />
+        </div>
 
         {/* Abstract Review Modal */}
         <AbstractReviewModal
@@ -770,12 +709,12 @@ if (authLoading) {
   )
 }
 
-// Email Test Component
+// 👉 Email Test Component
 function EmailTestComponent() {
   const [testEmail, setTestEmail] = useState('')
   const [testing, setTesting] = useState(false)
   const [result, setResult] = useState('')
-  const [emailConfig, setEmailConfig] = useState<any>(null)
+  const [emailConfig, setEmailConfig] = useState(null)
 
   const checkEmailConfig = async () => {
     try {
@@ -813,7 +752,7 @@ function EmailTestComponent() {
       } else {
         setResult(`❌ Test email failed: ${data.error}`)
       }
-    } catch (error: any) {
+    } catch (error) {
       setResult(`❌ Error: ${error.message}`)
     } finally {
       setTesting(false)
