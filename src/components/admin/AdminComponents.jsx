@@ -611,39 +611,39 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
                 {categoryStats?.poster?.rejected || 0}
               </td>
-            </tr>
-            <tr>
+            
+            
               <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PICU Case Cafe</td>
               <tr>
-  <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
-    {categoryStats?.innovators?.total || 0}
-  </td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
-    {categoryStats?.innovators?.pending || 0}
-  </td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
-    {categoryStats?.innovators?.approved || 0}
-  </td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
-    {categoryStats?.innovators?.rejected || 0}
-  </td>
-</tr>
-<tr>
-  <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
-    {categoryStats?.imaging?.total || 0}
-  </td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
-    {categoryStats?.imaging?.pending || 0}
-  </td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
-    {categoryStats?.imaging?.approved || 0}
-  </td>
-  <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
-    {categoryStats?.imaging?.rejected || 0}
-  </td>
-</tr>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
+                {categoryStats?.innovators?.total || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
+                {categoryStats?.innovators?.pending || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
+                {categoryStats?.innovators?.approved || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
+                {categoryStats?.innovators?.rejected || 0}
+              </td>
+            </tr>
+            <tr>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
+                {categoryStats?.imaging?.total || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
+                {categoryStats?.imaging?.pending || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
+                {categoryStats?.imaging?.approved || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
+                {categoryStats?.imaging?.rejected || 0}
+              </td>
+            </tr>
             </tr>
             <tr className="bg-gray-100 font-bold">
               <td className="border border-gray-300 px-4 py-3 font-bold text-gray-900">Total</td>
@@ -867,12 +867,12 @@ export const EnhancedAbstractTable = ({
           >
             <option value="all">All Categories</option>
             <option value="Article">Article</option>
-<option value="Award Paper">Award Paper</option>
-<option value="Case Report">Case Report</option>
-<option value="Poster">Poster</option>
-<option value="PICU Case Cafe">PICU Case Cafe</option>
-<option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
-<option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
+            <option value="Award Paper">Award Paper</option>
+            <option value="Case Report">Case Report</option>
+            <option value="Poster">Poster</option>
+            <option value="PICU Case Cafe">PICU Case Cafe</option>
+            <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
+            <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
           </select>
           <select 
             value={statusFilter}
