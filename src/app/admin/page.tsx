@@ -794,18 +794,79 @@ ${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional de
         {/* 👉 ORIGINAL STATISTICS TABLE - NO CHANGES */}
         <CategoryWiseStatisticsTable stats={stats} categoryStats={categoryStats} />
 
-        {/* 👉 ORIGINAL ENHANCED ABSTRACT TABLE - NO DUPLICATE INTERFACE */}
-        <EnhancedAbstractTable 
-          abstracts={filteredAbstracts}
-          onSelectAbstract={handleSelectAbstract}
-          onUpdateStatus={updateStatus}
-          onSendEmail={handleIndividualEmail}
-          onDownload={handleIndividualDownload}
-          onApprove={handleIndividualApprove}
-          onReject={handleIndividualReject}
-          handleBulkStatusUpdate={handleBulkStatusUpdate}
-          updatingStatus={updatingStatus}
-        />
+        {/* 👉 NEW: Enhanced Abstract Review Interface with Search & Filters */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-gray-900">📋 Abstract Review Interface</h3>
+            <div className="text-sm text-gray-500">
+              Showing: {filteredAbstracts.length} / {abstracts.length}
+            </div>
+          </div>
+          
+          {/* 👉 NEW: Search and Filter Controls */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div>
+              <input
+                type="text"
+                placeholder="Search abstracts..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            
+            <div>
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">All Categories</option>
+                <option value="Article">Article</option>
+                <option value="Award Paper">Award Paper</option>
+                <option value="Case Report">Case Report</option>
+                <option value="Poster">Poster</option>
+                <option value="PICU Case Cafe">PICU Case Cafe</option>
+                <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
+                <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
+              </select>
+            </div>
+            
+            <div>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="approved">Approved</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            
+            <div>
+              <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="all">All Files</option>
+                <option value="with">With Files</option>
+                <option value="without">Without Files</option>
+              </select>
+            </div>
+          </div>
+
+          {/* 👉 ORIGINAL ENHANCED ABSTRACT TABLE - Pass filtered abstracts */}
+          <EnhancedAbstractTable 
+            abstracts={filteredAbstracts}
+            onSelectAbstract={handleSelectAbstract}
+            onUpdateStatus={updateStatus}
+            onSendEmail={handleIndividualEmail}
+            onDownload={handleIndividualDownload}
+            onApprove={handleIndividualApprove}
+            onReject={handleIndividualReject}
+            handleBulkStatusUpdate={handleBulkStatusUpdate}
+            updatingStatus={updatingStatus}
+          />
+        </div>
 
         {/* 👉 ORIGINAL ABSTRACT REVIEW MODAL - NO CHANGES */}
         <AbstractReviewModal
