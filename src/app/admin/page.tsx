@@ -7,10 +7,11 @@ import { CategoryWiseStatisticsTable, EnhancedAbstractTable, AbstractReviewModal
 interface Abstract {
   id: string
   title: string
-  author: string
+  presenter_name: string    // ✅ Changed from author
   email: string
-  affiliation: string
-  category: string
+  institution_name: string // ✅ Changed from affiliation
+  presentation_type: string // ✅ Changed from category
+  category: string          // ✅ Keep this for participant category
   submissionDate: string
   status: 'pending' | 'approved' | 'rejected'
   abstract: string
@@ -18,6 +19,9 @@ interface Abstract {
   coAuthors?: string
   registrationId?: string
   abstractNumber?: string
+  file_name?: string        // ✅ Add file fields
+  file_path?: string
+  file_size?: number
 }
 
 interface Stats {
@@ -108,7 +112,7 @@ export default function AdminDashboard() {
     abstractsList.forEach(abstract => {
       let category = 'article' // default
       
-      const type = (abstract.category || abstract.presentation_type || '').toLowerCase()
+      const type = (abstract.presentation_type || abstract.category || '').toLowerCase()
       
       if (type.includes('award') && !type.includes('thesis') && !type.includes('imaging')) {
         category = 'awardPaper'

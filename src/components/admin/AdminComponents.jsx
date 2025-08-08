@@ -727,19 +727,25 @@ export const EnhancedAbstractTable = ({
 
   const getFilteredAbstracts = () => {
     return abstracts.filter(abstract => {
-      const matchesSearch = abstract.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          abstract.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          abstract.email.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesCategory = categoryFilter === 'all' || abstract.category === categoryFilter;
+    // ✅ FIXED: Search in correct fields
+      const matchesSearch = (abstract.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (abstract.presenter_name || abstract.author || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (abstract.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (abstract.institution_name || abstract.affiliation || '').toLowerCase().includes(searchTerm.toLowerCase());
+    
+    // ✅ FIXED: Category filter checks both fields
+      const matchesCategory = categoryFilter === 'all' || 
+                           abstract.presentation_type === categoryFilter ||
+                           abstract.category === categoryFilter;
+    
       const matchesStatus = statusFilter === 'all' || abstract.status === statusFilter;
-      
-      // ✅ NEW: File filter logic
+    
+    // File filter logic (unchanged)
       const hasFile = !!(abstract.file_name || abstract.file_path);
       const matchesFile = fileFilter === 'all' || 
-                         (fileFilter === 'with_file' && hasFile) ||
-                         (fileFilter === 'without_file' && !hasFile);
-      
+                       (fileFilter === 'with_file' && hasFile) ||
+                       (fileFilter === 'without_file' && !hasFile);
+    
       return matchesSearch && matchesCategory && matchesStatus && matchesFile;
     });
   };
@@ -772,22 +778,22 @@ export const EnhancedAbstractTable = ({
         5000
       );
 
-      const exportData = selected.map((abstract, index) => ({
-        'Abstract No': abstract.abstract_number || `ABST-${String(index + 1).padStart(3, '0')}`,
-        'Submission Date': formatDate(abstract.submission_date || abstract.submissionDate),
-        'Presenter Name': abstract.presenter_name || abstract.author,
-        'Email ID': abstract.email,
-        'Mobile No': abstract.mobile || 'N/A',
-        'Abstract Title': abstract.title,
-        'Co-Author Name': abstract.co_authors || abstract.coAuthors || 'N/A',
-        'Institution Name': abstract.institution || abstract.affiliation,
-        'Registration ID': abstract.registration_number || abstract.registrationId || 'N/A',
-        'Status': (abstract.status || 'pending').toUpperCase(),
-        'Category': abstract.presentation_type || abstract.category,
-        'File Status': (abstract.file_name || abstract.file_path) ? 'Available' : 'Missing', // ✅ NEW
-        'File Size (MB)': abstract.file_size ? (abstract.file_size / 1024 / 1024).toFixed(2) : 'N/A', // ✅ NEW
-        'Abstract Content': abstract.abstract_content || abstract.abstract || 'N/A'
-      }));
+        const exportData = selected.map((abstract, index) => ({
+          'Abstract No': abstract.abstract_number || `ABST-${String(index + 1).padStart(3, '0')}`,
+          'Submission Date': formatDate(abstract.submission_date || abstract.submissionDate),
+          'Presenter Name': abstract.presenter_name || abstract.author || 'N/A',  // ✅ Fixed
+          'Email ID': abstract.email,
+          'Mobile No': abstract.mobile || 'N/A',
+          'Abstract Title': abstract.title,
+          'Co-Author Name': abstract.co_authors || abstract.coAuthors || 'N/A',
+          'Institution Name': abstract.institution_name || abstract.affiliation || 'N/A',  // ✅ Fixed
+          'Registration ID': abstract.registration_number || abstract.registrationId || 'N/A',
+          'Status': (abstract.status || 'pending').toUpperCase(),
+          'Category': abstract.presentation_type || abstract.category,  // ✅ Fixed
+          'File Status': (abstract.file_name || abstract.file_path) ? 'Available' : 'Missing',
+          'File Size (MB)': abstract.file_size ? (abstract.file_size / 1024 / 1024).toFixed(2) : 'N/A',
+          'Abstract Content': abstract.abstract_content || abstract.abstract || 'N/A'
+        }));
 
       const headers = Object.keys(exportData[0]);
       const csvContent = [
@@ -971,7 +977,7 @@ export const EnhancedAbstractTable = ({
                   {index + 1}
                 </td>
                 <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {abstract.author}
+                  {abstract.presenter_name || 'N/A'}
                 </td>
                 <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500">
                   {abstract.email}
@@ -980,7 +986,7 @@ export const EnhancedAbstractTable = ({
                   {abstract.title}
                 </td>
                 <td className="px-3 py-4 text-sm text-gray-500 max-w-xs truncate">
-                  {abstract.affiliation}
+                  {abstract.institution_name || abstract.affiliation || 'N/A'}
                 </td>
                 <td className="px-3 py-4 whitespace-nowrap">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(abstract.status)}`}>
@@ -1101,12 +1107,12 @@ export const AbstractReviewModal = ({ abstract, isOpen, onClose, onUpdateStatus 
                 <p className="mt-1 text-sm text-gray-900">{abstract.title}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Author</label>
-                <p className="mt-1 text-sm text-gray-900">{abstract.author}</p>
+                <label className="block text-sm font-medium text-gray-700">Presenter Name</label>
+                <p className="mt-1 text-sm text-gray-900">{abstract.presenter_name || abstract.author || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Institution</label>
-                <p className="mt-1 text-sm text-gray-900">{abstract.affiliation}</p>
+                <p className="mt-1 text-sm text-gray-900">{abstract.institution_name || abstract.affiliation || 'N/A'}</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">Email</label>
