@@ -40,11 +40,15 @@ export default function AdminDashboard() {
   const [authLoading, setAuthLoading] = useState(true)
   const [abstracts, setAbstracts] = useState<Abstract[]>([])
   const [stats, setStats] = useState<Stats>({ total: 0, pending: 0, approved: 0, rejected: 0 })
-  const [categoryStats, setCategoryStats] = useState<CategoryStats>({
-    freePaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+  // 👉 UPDATED: Category stats structure for ALL 7 categories
+  const [categoryStats, setCategoryStats] = useState({
+    article: { total: 0, pending: 0, approved: 0, rejected: 0 },
     awardPaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    caseReport: { total: 0, pending: 0, approved: 0, rejected: 0 },
     poster: { total: 0, pending: 0, approved: 0, rejected: 0 },
-    ePoster: { total: 0, pending: 0, approved: 0, rejected: 0 }
+    picuCafe: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    innovators: { total: 0, pending: 0, approved: 0, rejected: 0 },
+    imaging: { total: 0, pending: 0, approved: 0, rejected: 0 }
   })
   const [loading, setLoading] = useState(true)
   const [selectedAbstract, setSelectedAbstract] = useState<Abstract | null>(null)
@@ -120,20 +124,38 @@ export default function AdminDashboard() {
     setFilteredAbstracts(filtered)
   }, [abstracts, searchTerm, statusFilter, categoryFilter])
 
-  // 👉 ORIGINAL CATEGORY CALCULATION - NO CHANGES
+  // 👉 UPDATED: Calculate Category Stats for ALL 7 categories
   const calculateCategoryStats = (abstractsList: Abstract[]) => {
     const stats = {
-      freePaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      article: { total: 0, pending: 0, approved: 0, rejected: 0 },
       awardPaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      caseReport: { total: 0, pending: 0, approved: 0, rejected: 0 },
       poster: { total: 0, pending: 0, approved: 0, rejected: 0 },
-      ePoster: { total: 0, pending: 0, approved: 0, rejected: 0 }
+      picuCafe: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      innovators: { total: 0, pending: 0, approved: 0, rejected: 0 },
+      imaging: { total: 0, pending: 0, approved: 0, rejected: 0 }
     }
 
     abstractsList.forEach(abstract => {
-      let category = 'freePaper'
-      if (abstract.category.toLowerCase().includes('award')) category = 'awardPaper'
-      else if (abstract.category.toLowerCase().includes('e-poster')) category = 'ePoster'
-      else if (abstract.category.toLowerCase().includes('poster')) category = 'poster'
+      let category = 'article' // default
+      
+      const type = (abstract.category || abstract.presentation_type || '').toLowerCase()
+      
+      if (type.includes('award') && !type.includes('thesis') && !type.includes('imaging')) {
+        category = 'awardPaper'
+      } else if (type.includes('case') && type.includes('report')) {
+        category = 'caseReport'
+      } else if (type.includes('poster') && !type.includes('picu')) {
+        category = 'poster'
+      } else if (type.includes('picu') || type.includes('cafe')) {
+        category = 'picuCafe'
+      } else if (type.includes('innovators') || type.includes('thesis') || type.includes('dm/drnb')) {
+        category = 'innovators'
+      } else if (type.includes('imaging') || type.includes('radiology') || type.includes('clinico')) {
+        category = 'imaging'
+      } else if (type.includes('article') || type.includes('original')) {
+        category = 'article'
+      }
 
       stats[category].total++
       if (abstract.status === 'pending') stats[category].pending++
@@ -772,79 +794,18 @@ ${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional de
         {/* 👉 ORIGINAL STATISTICS TABLE - NO CHANGES */}
         <CategoryWiseStatisticsTable stats={stats} categoryStats={categoryStats} />
 
-        {/* 👉 NEW: Enhanced Abstract Review Interface with Search & Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">📋 Abstract Review Interface</h3>
-            <div className="text-sm text-gray-500">
-              Showing: {filteredAbstracts.length} / {abstracts.length}
-            </div>
-          </div>
-          
-          {/* 👉 NEW: Search and Filter Controls */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div>
-              <input
-                type="text"
-                placeholder="Search abstracts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            
-            <div>
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="all">All Categories</option>
-                <option value="Article">Article</option>
-                <option value="Award Paper">Award Paper</option>
-                <option value="Case Report">Case Report</option>
-                <option value="Poster">Poster</option>
-                <option value="PICU Case Cafe">PICU Case Cafe</option>
-                <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
-                <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
-              </select>
-            </div>
-            
-            <div>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-            
-            <div>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="all">All Files</option>
-                <option value="with">With Files</option>
-                <option value="without">Without Files</option>
-              </select>
-            </div>
-          </div>
-
-          {/* 👉 ORIGINAL ENHANCED ABSTRACT TABLE - Pass filtered abstracts */}
-          <EnhancedAbstractTable 
-            abstracts={filteredAbstracts}
-            onSelectAbstract={handleSelectAbstract}
-            onUpdateStatus={updateStatus}
-            onSendEmail={handleIndividualEmail}
-            onDownload={handleIndividualDownload}
-            onApprove={handleIndividualApprove}
-            onReject={handleIndividualReject}
-            handleBulkStatusUpdate={handleBulkStatusUpdate}
-            updatingStatus={updatingStatus}
-          />
-        </div>
+        {/* 👉 ORIGINAL ENHANCED ABSTRACT TABLE - NO DUPLICATE INTERFACE */}
+        <EnhancedAbstractTable 
+          abstracts={filteredAbstracts}
+          onSelectAbstract={handleSelectAbstract}
+          onUpdateStatus={updateStatus}
+          onSendEmail={handleIndividualEmail}
+          onDownload={handleIndividualDownload}
+          onApprove={handleIndividualApprove}
+          onReject={handleIndividualReject}
+          handleBulkStatusUpdate={handleBulkStatusUpdate}
+          updatingStatus={updatingStatus}
+        />
 
         {/* 👉 ORIGINAL ABSTRACT REVIEW MODAL - NO CHANGES */}
         <AbstractReviewModal
