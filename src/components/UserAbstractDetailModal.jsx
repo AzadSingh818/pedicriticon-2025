@@ -191,7 +191,7 @@ export default function UserAbstractDetailModal({ abstract, isOpen, onClose }) {
             <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
               <h4 className="text-sm font-medium text-green-800 mb-2">�� Congratulations!</h4>
               <p className="text-sm text-green-700">
-                Your abstract has been approved for presentation at APBMT 2025. 
+                Your abstract has been approved for presentation at Pedicriticon 2025. 
                 {!abstract.final_file_url && ' Please upload your final presentation when ready.'}
               </p>
             </div>
