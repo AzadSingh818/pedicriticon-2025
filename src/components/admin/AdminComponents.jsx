@@ -628,8 +628,7 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               </td>
             </tr>
             <tr>
-              <tr>
-              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</td>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Innovators of Tomorrow</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
                 {categoryStats?.innovators?.total || 0}
               </td>
@@ -644,7 +643,7 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               </td>
             </tr>
             <tr>
-              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</td>
+              <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PediCritiCon Imaging Honors</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
                 {categoryStats?.imaging?.total || 0}
               </td>
@@ -657,7 +656,6 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
                 {categoryStats?.imaging?.rejected || 0}
               </td>
-            </tr>
             </tr>
             <tr className="bg-gray-100 font-bold">
               <td className="border border-gray-300 px-4 py-3 font-bold text-gray-900">Total</td>
