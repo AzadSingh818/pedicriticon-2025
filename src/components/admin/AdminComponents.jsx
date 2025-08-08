@@ -614,18 +614,36 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
             </tr>
             <tr>
               <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PICU Case Cafe</td>
-              <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
-                {categoryStats?.picuCafe?.total || 0}
-              </td>
-              <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
-                {categoryStats?.picuCafe?.pending || 0}
-              </td>
-              <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
-                {categoryStats?.picuCafe?.approved || 0}
-              </td>
-              <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
-                {categoryStats?.picuCafe?.rejected || 0}
-              </td>
+              <tr>
+  <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
+    {categoryStats?.innovators?.total || 0}
+  </td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
+    {categoryStats?.innovators?.pending || 0}
+  </td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
+    {categoryStats?.innovators?.approved || 0}
+  </td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
+    {categoryStats?.innovators?.rejected || 0}
+  </td>
+</tr>
+<tr>
+  <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
+    {categoryStats?.imaging?.total || 0}
+  </td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
+    {categoryStats?.imaging?.pending || 0}
+  </td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
+    {categoryStats?.imaging?.approved || 0}
+  </td>
+  <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
+    {categoryStats?.imaging?.rejected || 0}
+  </td>
+</tr>
             </tr>
             <tr className="bg-gray-100 font-bold">
               <td className="border border-gray-300 px-4 py-3 font-bold text-gray-900">Total</td>
@@ -848,10 +866,13 @@ export const EnhancedAbstractTable = ({
             className="px-3 py-2 border border-black rounded-lg focus:ring-2 focus:ring-white text-black"
           >
             <option value="all">All Categories</option>
-            {/* <option value="Free Paper">Free Paper</option>
-            <option value="Award Paper">Award Paper</option> */}
-            <option value="Poster">Poster</option>
-            <option value="E-Poster">Oral Presentaion</option>
+            <option value="Article">Article</option>
+<option value="Award Paper">Award Paper</option>
+<option value="Case Report">Case Report</option>
+<option value="Poster">Poster</option>
+<option value="PICU Case Cafe">PICU Case Cafe</option>
+<option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
+<option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
           </select>
           <select 
             value={statusFilter}

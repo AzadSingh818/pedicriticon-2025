@@ -1,5 +1,5 @@
 'use client'
-// src/app/admin/page.tsx - MINIMAL FIX - Only Categories & Search Fixed
+// src/app/admin/page.tsx - FIXED VERSION - No Duplicate + 7 Categories
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CategoryWiseStatisticsTable, EnhancedAbstractTable, AbstractReviewModal } from '@/components/admin/AdminComponents'
@@ -27,21 +27,27 @@ interface Stats {
   rejected: number
 }
 
+// 👉 UPDATED: ALL 7 Categories Support
 interface CategoryStats {
-  freePaper: { total: number; pending: number; approved: number; rejected: number }
+  article: { total: number; pending: number; approved: number; rejected: number }
   awardPaper: { total: number; pending: number; approved: number; rejected: number }
+  caseReport: { total: number; pending: number; approved: number; rejected: number }
   poster: { total: number; pending: number; approved: number; rejected: number }
-  ePoster: { total: number; pending: number; approved: number; rejected: number }
+  picuCafe: { total: number; pending: number; approved: number; rejected: number }
+  innovators: { total: number; pending: number; approved: number; rejected: number }
+  imaging: { total: number; pending: number; approved: number; rejected: number }
 }
 
 export default function AdminDashboard() {
   const router = useRouter()
+  
   // 👉 ORIGINAL AUTH CODE - NO CHANGES
   const [authLoading, setAuthLoading] = useState(true)
   const [abstracts, setAbstracts] = useState<Abstract[]>([])
   const [stats, setStats] = useState<Stats>({ total: 0, pending: 0, approved: 0, rejected: 0 })
+  
   // 👉 UPDATED: Category stats structure for ALL 7 categories
-  const [categoryStats, setCategoryStats] = useState({
+  const [categoryStats, setCategoryStats] = useState<CategoryStats>({
     article: { total: 0, pending: 0, approved: 0, rejected: 0 },
     awardPaper: { total: 0, pending: 0, approved: 0, rejected: 0 },
     caseReport: { total: 0, pending: 0, approved: 0, rejected: 0 },
@@ -50,6 +56,7 @@ export default function AdminDashboard() {
     innovators: { total: 0, pending: 0, approved: 0, rejected: 0 },
     imaging: { total: 0, pending: 0, approved: 0, rejected: 0 }
   })
+  
   const [loading, setLoading] = useState(true)
   const [selectedAbstract, setSelectedAbstract] = useState<Abstract | null>(null)
   const [filter, setFilter] = useState('all')
@@ -57,12 +64,6 @@ export default function AdminDashboard() {
   const [showEmailTester, setShowEmailTester] = useState(false)
   const [exporting, setExporting] = useState(false)
   const [showReviewModal, setShowReviewModal] = useState(false)
-
-  // 👉 NEW: Search & Filter States - ONLY ADDITION
-  const [searchTerm, setSearchTerm] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState('all')
-  const [statusFilter, setStatusFilter] = useState('all')
-  const [filteredAbstracts, setFilteredAbstracts] = useState<Abstract[]>([])
 
   // 👉 ORIGINAL AUTH CHECK - NO CHANGES
   useEffect(() => {
@@ -91,38 +92,6 @@ export default function AdminDashboard() {
       fetchAbstracts()
     }
   }, [filter, authLoading])
-
-  // 👉 NEW: Search & Filter Logic - ONLY ADDITION
-  useEffect(() => {
-    let filtered = [...abstracts]
-    
-    // Search filter
-    if (searchTerm.trim()) {
-      const search = searchTerm.toLowerCase()
-      filtered = filtered.filter(abstract => 
-        abstract.title?.toLowerCase().includes(search) ||
-        abstract.author?.toLowerCase().includes(search) ||
-        abstract.email?.toLowerCase().includes(search) ||
-        abstract.affiliation?.toLowerCase().includes(search) ||
-        abstract.abstractNumber?.toLowerCase().includes(search)
-      )
-    }
-    
-    // Status filter
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(abstract => abstract.status === statusFilter)
-    }
-    
-    // Category filter  
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter(abstract => 
-        abstract.category === categoryFilter || 
-        abstract.presentation_type === categoryFilter
-      )
-    }
-    
-    setFilteredAbstracts(filtered)
-  }, [abstracts, searchTerm, statusFilter, categoryFilter])
 
   // 👉 UPDATED: Calculate Category Stats for ALL 7 categories
   const calculateCategoryStats = (abstractsList: Abstract[]) => {
@@ -791,82 +760,21 @@ ${error.stack ? `Stack: ${error.stack.substring(0, 200)}...` : 'No additional de
           </div>
         )}
 
-        {/* 👉 ORIGINAL STATISTICS TABLE - NO CHANGES */}
+        {/* 👉 FIXED: Statistics Table with ALL 7 Categories */}
         <CategoryWiseStatisticsTable stats={stats} categoryStats={categoryStats} />
 
-        {/* 👉 NEW: Enhanced Abstract Review Interface with Search & Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">📋 Abstract Review Interface</h3>
-            <div className="text-sm text-gray-500">
-              Showing: {filteredAbstracts.length} / {abstracts.length}
-            </div>
-          </div>
-          
-          {/* 👉 NEW: Search and Filter Controls */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div>
-              <input
-                type="text"
-                placeholder="Search abstracts..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            
-            <div>
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="all">All Categories</option>
-                <option value="Article">Article</option>
-                <option value="Award Paper">Award Paper</option>
-                <option value="Case Report">Case Report</option>
-                <option value="Poster">Poster</option>
-                <option value="PICU Case Cafe">PICU Case Cafe</option>
-                <option value="Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</option>
-                <option value="PediCritiCon Imaging Honors: Clinico-Radiology Case Awards">PediCritiCon Imaging Honors: Clinico-Radiology Case Awards</option>
-              </select>
-            </div>
-            
-            <div>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="all">All Status</option>
-                <option value="pending">Pending</option>
-                <option value="approved">Approved</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-            
-            <div>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="all">All Files</option>
-                <option value="with">With Files</option>
-                <option value="without">Without Files</option>
-              </select>
-            </div>
-          </div>
-
-          {/* 👉 ORIGINAL ENHANCED ABSTRACT TABLE - Pass filtered abstracts */}
-          <EnhancedAbstractTable 
-            abstracts={filteredAbstracts}
-            onSelectAbstract={handleSelectAbstract}
-            onUpdateStatus={updateStatus}
-            onSendEmail={handleIndividualEmail}
-            onDownload={handleIndividualDownload}
-            onApprove={handleIndividualApprove}
-            onReject={handleIndividualReject}
-            handleBulkStatusUpdate={handleBulkStatusUpdate}
-            updatingStatus={updatingStatus}
-          />
-        </div>
+        {/* 👉 SINGLE Abstract Review Interface - NO DUPLICATE */}
+        <EnhancedAbstractTable 
+          abstracts={abstracts}
+          onSelectAbstract={handleSelectAbstract}
+          onUpdateStatus={updateStatus}
+          onSendEmail={handleIndividualEmail}
+          onDownload={handleIndividualDownload}
+          onApprove={handleIndividualApprove}
+          onReject={handleIndividualReject}
+          handleBulkStatusUpdate={handleBulkStatusUpdate}
+          updatingStatus={updatingStatus}
+        />
 
         {/* 👉 ORIGINAL ABSTRACT REVIEW MODAL - NO CHANGES */}
         <AbstractReviewModal
