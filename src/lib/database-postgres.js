@@ -1,10 +1,5 @@
 // src/lib/database-postgres.js
-
-
-
-
-
-// 🚀 FIXED Database configuration for Neon PostgreSQL
+// 🚀 COMPLETE FIXED VERSION - Replace your entire file with this
 
 import { Pool } from 'pg';
 
@@ -459,27 +454,166 @@ export async function getAbstractById(abstractId) {
   }
 }
 
-// Add other missing functions
+// 🚀 SINGLE ABSTRACT STATUS UPDATE
 export async function updateAbstractStatus(abstractId, status, comments = null) {
   const client = await pool.connect();
   try {
     const id = typeof abstractId === 'string' ? parseInt(abstractId, 10) : abstractId;
-    if (isNaN(id)) throw new Error('Invalid abstract ID provided');
+    
+    if (isNaN(id)) {
+      throw new Error('Invalid abstract ID provided');
+    }
+    
+    console.log(`🔄 Updating abstract ${id} status to: ${status}`);
     
     const query = `
       UPDATE abstracts 
       SET status = $1, reviewer_comments = $2, updated_at = NOW()
-      WHERE id = $3 RETURNING *
+      WHERE id = $3
+      RETURNING *
     `;
     
     const result = await client.query(query, [status, comments, id]);
-    if (result.rows.length === 0) throw new Error(`Abstract with ID ${id} not found`);
+    
+    if (result.rows.length === 0) {
+      throw new Error(`Abstract with ID ${id} not found`);
+    }
     
     console.log('✅ Abstract status updated successfully');
     return result.rows[0];
     
   } catch (error) {
     console.error('❌ Error updating abstract status:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+// 🚀 BULK UPDATE FUNCTION - यह function पहले missing था!
+export async function bulkUpdateAbstractStatus(abstractIds, status, comments = null) {
+  const client = await pool.connect();
+  
+  try {
+    console.log(`🔄 [PostgreSQL] Bulk updating ${abstractIds.length} abstracts to status: ${status}`);
+    
+    // Convert all IDs to integers and validate
+    const validIds = abstractIds.map(id => {
+      const numId = typeof id === 'string' ? parseInt(id, 10) : id;
+      if (isNaN(numId)) {
+        throw new Error(`Invalid abstract ID: ${id}`);
+      }
+      return numId;
+    });
+    
+    console.log('📊 Valid IDs to update:', validIds);
+    
+    // Start transaction for atomicity
+    await client.query('BEGIN');
+    
+    // Build query with proper parameterization
+    const placeholders = validIds.map((_, index) => `$${index + 1}`).join(',');
+    const query = `
+      UPDATE abstracts 
+      SET status = $${validIds.length + 1}, 
+          reviewer_comments = $${validIds.length + 2}, 
+          updated_at = NOW()
+      WHERE id IN (${placeholders})
+      RETURNING id, title, status, presenter_name, updated_at
+    `;
+    
+    const values = [...validIds, status, comments];
+    console.log('🔄 Executing bulk update query...');
+    console.log('📋 Query:', query);
+    console.log('📋 Values:', values);
+    
+    const result = await client.query(query, values);
+    
+    // Commit transaction
+    await client.query('COMMIT');
+    
+    const updatedCount = result.rows.length;
+    console.log(`✅ [PostgreSQL] Successfully updated ${updatedCount} abstracts in bulk`);
+    
+    return result.rows;
+    
+  } catch (error) {
+    // Rollback transaction on error
+    await client.query('ROLLBACK');
+    
+    console.error('❌ [PostgreSQL] Bulk update error:', error);
+    throw error;
+    
+  } finally {
+    client.release();
+  }
+}
+
+export async function updateAbstract(abstractId, updateData) {
+  const client = await pool.connect();
+  try {
+    // Convert to integer if string
+    const id = typeof abstractId === 'string' ? parseInt(abstractId, 10) : abstractId;
+    
+    if (isNaN(id)) {
+      throw new Error('Invalid abstract ID provided');
+    }
+    
+    console.log(`🔄 Updating abstract ${id} with data:`, Object.keys(updateData));
+    
+    // Build dynamic query based on provided fields
+    const fields = Object.keys(updateData);
+    const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
+    const values = Object.values(updateData);
+    values.push(id); // Add ID for WHERE clause
+    
+    const query = `
+      UPDATE abstracts 
+      SET ${setClause}, updated_at = NOW()
+      WHERE id = $${values.length}
+      RETURNING *
+    `;
+    
+    const result = await client.query(query, values);
+    
+    if (result.rows.length === 0) {
+      throw new Error(`Abstract with ID ${id} not found`);
+    }
+    
+    console.log('✅ Abstract updated successfully');
+    return result.rows[0];
+    
+  } catch (error) {
+    console.error('❌ Error updating abstract:', error);
+    throw error;
+  } finally {
+    client.release();
+  }
+}
+
+export async function deleteAbstract(abstractId) {
+  const client = await pool.connect();
+  try {
+    const id = typeof abstractId === 'string' ? parseInt(abstractId, 10) : abstractId;
+    
+    if (isNaN(id)) {
+      throw new Error('Invalid abstract ID provided');
+    }
+    
+    console.log(`🔄 Deleting abstract ${id}...`);
+    
+    const query = 'DELETE FROM abstracts WHERE id = $1 RETURNING *';
+    const result = await client.query(query, [id]);
+    
+    if (result.rows.length === 0) {
+      throw new Error(`Abstract with ID ${id} not found`);
+    }
+    
+    console.log('✅ Abstract deleted successfully');
+    return result.rows[0];
+    
+  } catch (error) {
+    console.error('❌ Error deleting abstract:', error);
     throw error;
   } finally {
     client.release();
@@ -573,7 +707,7 @@ export async function initializeDatabase() {
   }
 }
 
-// Additional utility functions
+// Get all uploaded files linked to a specific abstract
 export async function getFilesByAbstractId(abstractId) {
   const result = await pool.query(
     `SELECT file_name, file_path, file_size FROM uploaded_files WHERE abstract_id = $1`,
@@ -585,7 +719,8 @@ export async function getFilesByAbstractId(abstractId) {
 export async function saveUploadedFile(fileData) {
   const { abstract_id, file_name, file_path, file_size } = fileData;
   await pool.query(
-    `INSERT INTO uploaded_files (abstract_id, file_name, file_path, file_size) VALUES ($1, $2, $3, $4)`,
+    `INSERT INTO uploaded_files (abstract_id, file_name, file_path, file_size)
+     VALUES ($1, $2, $3, $4)`,
     [abstract_id, file_name, file_path, file_size]
   );
 }
@@ -600,26 +735,66 @@ export async function closePool() {
   }
 }
 
-// Export pool for direct access
+// ========================================
+// ERROR HANDLING UTILITIES
+// ========================================
+
+export function handleDatabaseError(error, operation) {
+  console.error(`❌ Database error during ${operation}:`, {
+    message: error.message,
+    code: error.code,
+    detail: error.detail,
+    hint: error.hint
+  });
+  
+  // Return user-friendly error messages
+  if (error.code === '23505') { // Unique violation
+    return new Error('A record with this information already exists');
+  } else if (error.code === '23503') { // Foreign key violation
+    return new Error('Referenced record not found');
+  } else if (error.code === '23502') { // Not null violation
+    return new Error('Required field is missing');
+  } else if (error.code === '42703') { // Undefined column
+    return new Error('Database schema mismatch - please contact administrator');
+  } else {
+    return new Error(`Database operation failed: ${error.message}`);
+  }
+}
+
+// Export pool for direct access if needed
 export { pool };
 
-// Default export
+// 🚀 UPDATED DEFAULT EXPORT WITH BULK FUNCTION
 export default {
+  // User functions
   createUser,
   getUserByEmail,
   getUserById,
+  
+  // Abstract functions with category compatibility and download support
   createAbstract,
   getAbstractsByUserId,
   getUserAbstracts,
   getAllAbstracts,
   getAbstractById,
   updateAbstractStatus,
+  bulkUpdateAbstractStatus,  // ← ADDED MISSING FUNCTION
+  updateAbstract,
+  deleteAbstract,
+  getFilesByAbstractId,
+  saveUploadedFile,
+  
+  // Statistics and utilities
   getStatistics,
   testConnection,
   initializeDatabase,
   closePool,
-  getFilesByAbstractId,
-  saveUploadedFile,
+  handleDatabaseError,
+  
+  // Migration utilities
+  checkCategoryColumnExists,
   migrateCategoryColumn,
+  
+  // Direct pool access
   pool
 };
