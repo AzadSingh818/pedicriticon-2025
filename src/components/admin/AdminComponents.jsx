@@ -611,9 +611,23 @@ export const CategoryWiseStatisticsTable = ({ stats, categoryStats }) => {
               <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
                 {categoryStats?.poster?.rejected || 0}
               </td>
-            
-            
+            </tr>
+            <tr>
               <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">PICU Case Cafe</td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
+                {categoryStats?.picuCafe?.total || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-yellow-50 text-yellow-800">
+                {categoryStats?.picuCafe?.pending || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-green-50 text-green-800">
+                {categoryStats?.picuCafe?.approved || 0}
+              </td>
+              <td className="border border-gray-300 px-4 py-3 text-center bg-red-50 text-red-800">
+                {categoryStats?.picuCafe?.rejected || 0}
+              </td>
+            </tr>
+            <tr>
               <tr>
               <td className="border border-gray-300 px-4 py-3 font-medium text-black bg-white">Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards</td>
               <td className="border border-gray-300 px-4 py-3 text-center bg-blue-50 font-semibold text-blue-800">
