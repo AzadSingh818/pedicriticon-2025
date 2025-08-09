@@ -37,7 +37,7 @@ export default function AbstractGuidelines() {
                 Abstract Submission Guidelines
               </h1>
               <p className="text-lg text-gray-600">
-                PEDICRITICON 2025, 27th November 2025 Conference of the IAP Intensive Care Chapter
+                PEDICRITICON 2025, 27th National Conference of the IAP Intensive Care Chapter, PEDICRITICON 2025
               </p>
             </div>
             
@@ -47,31 +47,17 @@ export default function AbstractGuidelines() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        
-        {/* Alert Banner */}
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-          <div className="flex items-center">
-            <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
-            <div>
-              <h3 className="font-semibold text-red-800">Important Notice</h3>
-              <p className="text-red-700 text-sm">
-                Abstract submission deadline has been extended to <strong>30th September 2025</strong>. 
-                All guidelines below must be followed for successful submission.
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Category Tabs */}
         <div className="bg-white rounded-lg shadow-lg mb-8">
           <div className="border-b border-gray-200">
             <nav className="flex space-x-8 px-8 pt-6">
+              <div className="flex space-x-4">
               <button
                 onClick={() => setActiveTab('general')}
-                className={`pb-4 px-1 border-b-2 font-medium text-sm ${
+                className={`bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ${
                   activeTab === 'general'
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-blue-600 shadow-lg'
+                    : 'bg-blue-500'
                 }`}
               >
                 <div className="flex items-center">
@@ -79,12 +65,13 @@ export default function AbstractGuidelines() {
                   General Abstract Guidelines
                 </div>
               </button>
+
               <button
                 onClick={() => setActiveTab('picu')}
-                className={`pb-4 px-1 border-b-2 font-medium text-sm ${
+                className={`bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ${
                   activeTab === 'picu'
-                    ? 'border-orange-500 text-orange-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-orange-600 shadow-lg'
+                    : 'bg-orange-500'
                 }`}
               >
                 <div className="flex items-center">
@@ -92,12 +79,13 @@ export default function AbstractGuidelines() {
                   PICU Case Café
                 </div>
               </button>
+
               <button
                 onClick={() => setActiveTab('thesis')}
-                className={`pb-4 px-1 border-b-2 font-medium text-sm ${
+                className={`bg-purple-500 hover:bg-purple-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ${
                   activeTab === 'thesis'
-                    ? 'border-purple-500 text-purple-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-purple-600 shadow-lg'
+                    : 'bg-purple-500'
                 }`}
               >
                 <div className="flex items-center">
@@ -105,12 +93,13 @@ export default function AbstractGuidelines() {
                   Innovators of Tomorrow
                 </div>
               </button>
+
               <button
                 onClick={() => setActiveTab('radiology')}
-                className={`pb-4 px-1 border-b-2 font-medium text-sm ${
+                className={`bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ${
                   activeTab === 'radiology'
-                    ? 'border-green-500 text-green-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                    ? 'bg-green-600 shadow-lg'
+                    : 'bg-green-500'
                 }`}
               >
                 <div className="flex items-center">
@@ -118,6 +107,7 @@ export default function AbstractGuidelines() {
                   Radiology Case Contest
                 </div>
               </button>
+            </div>
             </nav>
           </div>
 
@@ -131,7 +121,19 @@ export default function AbstractGuidelines() {
                     General Abstract Guidelines
                   </h2>
                 </div>
-                
+                {/* Alert Banner */}
+                { <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+                    <div>
+                      <h3 className="font-semibold text-red-800">Important Notice</h3>
+                      <p className="text-red-700 text-sm">
+                        Abstract submission deadline has been extended to <strong>30th September Midnight 12:00 A.M</strong>.
+                        All guidelines below must be followed for successful submission.
+                      </p>
+                    </div>
+                  </div>
+                </div> }
                 <div className="bg-gradient-to-r from-red-50 to-orange-50 border-l-4 border-red-400 p-4 mb-8">
                   <p className="text-red-800 font-semibold text-lg">
                     FOR AWARD PAPER PRESENTATION, ORIGINAL ARTICLES AND CASE REPORTS
@@ -271,7 +273,19 @@ export default function AbstractGuidelines() {
                     Guidelines for "PICU Case Café"
                   </h2>
                 </div>
-
+                {/* Alert Banner */}
+                { <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+                    <div>
+                      <h3 className="font-semibold text-red-800">Important Notice</h3>
+                      <p className="text-red-700 text-sm">
+                        Abstract submission deadline has been extended to <strong>31st August Midnight 12:00 A.M</strong>. 
+                        All guidelines below must be followed for successful submission.
+                      </p>
+                    </div>
+                  </div>
+                </div> }
                 <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-l-4 border-orange-400 p-4 mb-8">
                   <p className="text-orange-800 font-semibold text-lg">
                     PediCritiCon 2025 (7th November 2025)
@@ -369,7 +383,19 @@ export default function AbstractGuidelines() {
                     Innovators of Tomorrow: Pediatric Critical Care DM/DrNB Thesis Awards
                   </h2>
                 </div>
-
+                {/* Alert Banner */}
+                { <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+                    <div>
+                      <h3 className="font-semibold text-red-800">Important Notice</h3>
+                      <p className="text-red-700 text-sm">
+                        Abstract submission deadline has been extended to <strong>31st August Midnight 12:00 A.M</strong>. 
+                        All guidelines below must be followed for successful submission.
+                      </p>
+                    </div>
+                  </div>
+                </div> }
                 <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border-l-4 border-purple-400 p-4 mb-8">
                   <p className="text-purple-800 font-semibold text-lg">
                     Guidelines for Best DM/DrNB Thesis Award in Pediatric Critical Care
@@ -455,7 +481,19 @@ export default function AbstractGuidelines() {
                     Radiology Case Contest
                   </h2>
                 </div>
-
+                {/* Alert Banner */}
+                { <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+                  <div className="flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-3" />
+                    <div>
+                      <h3 className="font-semibold text-red-800">Important Notice</h3>
+                      <p className="text-red-700 text-sm">
+                        Abstract submission deadline has been extended to <strong>31st August Midnight 12:00 A.M</strong>. 
+                        All guidelines below must be followed for successful submission.
+                      </p>
+                    </div>
+                  </div>
+                </div> }
                 <div className="bg-gradient-to-r from-green-50 to-blue-50 border-l-4 border-green-400 p-4 mb-8">
                   <p className="text-green-800 font-semibold text-lg">
                     6th to 9th November 2025

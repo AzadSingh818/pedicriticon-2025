@@ -135,7 +135,7 @@ export default function PedicriticonHomepage() {
         <div className="max-w-7xl mx-auto px-4 text-center">
           <div className="inline-flex items-center bg-white/10 rounded-full px-4 py-2 mb-6">
             <Bell className="h-4 w-4 mr-2" />
-            <span className="text-sm font-medium">Abstract Submission Extended to 31st August 2025</span>
+            <span className="text-sm font-medium">Abstract Submission Extended to 30th September 2025 (Midnight 12:00 A.M)</span>
           </div>
           
           <h1 className="text-5xl font-bold mb-6">
